@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/models/user_models.dart';
-import 'package:shamo/providers/auth_provider.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/models/user_models.dart';
+import 'package:jogjasport/providers/auth_provider.dart';
+import 'package:jogjasport/theme.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key key}) : super(key: key);
@@ -25,7 +25,7 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   ClipOval(
                     child: Image.network(
-                      user.profilePhotoUrl,
+                      '${user.profilePhotoUrl}&size=512',
                       width: 64,
                     ),
                   ),
@@ -103,7 +103,7 @@ class ProfilePage extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                'Account',
+                'Pengaturan Akun',
                 style: primarytextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: semiBold,
@@ -114,33 +114,19 @@ class ProfilePage extends StatelessWidget {
                   Navigator.pushNamed(context, '/edit-profile');
                 },
                 child: menuItem(
-                  'Edit Profile',
+                  'Edit Profil',
                 ),
               ),
-              menuItem(
-                'Your Orders',
-              ),
-              menuItem(
-                'Help',
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/order-page');
+                },
+                child: menuItem(
+                  'Orderan Kamu',
+                ),
               ),
               const SizedBox(
                 height: 30,
-              ),
-              Text(
-                'General',
-                style: primarytextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: semiBold,
-                ),
-              ),
-              menuItem(
-                'Privacy & Policyc',
-              ),
-              menuItem(
-                'Term of Service',
-              ),
-              menuItem(
-                'Rate App',
               ),
             ],
           ),

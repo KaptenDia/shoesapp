@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/providers/cart_provider.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/providers/cart_provider.dart';
+import 'package:jogjasport/theme.dart';
 
 import '../widgets/cart_card.dart';
 
@@ -17,7 +17,7 @@ class CartPage extends StatelessWidget {
         backgroundColor: bgColor1,
         centerTitle: true,
         title: const Text(
-          'Your Cart',
+          'Keranjang',
         ),
         elevation: 0,
       );
@@ -36,7 +36,7 @@ class CartPage extends StatelessWidget {
               height: 20,
             ),
             Text(
-              'Oops! Your Cart is Empty',
+              'Oops! Keranjang kamu masih kosong',
               style: primarytextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -46,7 +46,7 @@ class CartPage extends StatelessWidget {
               height: 12,
             ),
             Text(
-              'Let\'s find your favorite shoes',
+              'Yuk cari terlebih dahulu sepatu yang kamu mau!',
               style: secondarytextStyle,
             ),
             Container(
@@ -110,7 +110,7 @@ class CartPage extends StatelessWidget {
                     style: primarytextStyle,
                   ),
                   Text(
-                    '\$${cartProvider.totalPrice()}',
+                    'Rp.${cartProvider.totalPrice()}',
                     style: pricetextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
@@ -153,7 +153,7 @@ class CartPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Continue to Checkout',
+                      'Lanjut ke checkout',
                       style: primarytextStyle.copyWith(
                         fontSize: 16,
                         fontWeight: semiBold,

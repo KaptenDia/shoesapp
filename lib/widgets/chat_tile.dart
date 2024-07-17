@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shamo/models/message_model.dart';
-import 'package:shamo/models/product_model.dart';
-import 'package:shamo/pages/home/detail_chat_page.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/models/message_model.dart';
+import 'package:jogjasport/models/product_model.dart';
+import 'package:jogjasport/pages/home/detail_chat_page.dart';
+import 'package:jogjasport/theme.dart';
 
 class ChatTile extends StatelessWidget {
   const ChatTile(this.message, {Key key}) : super(key: key);
@@ -42,7 +42,7 @@ class ChatTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Shoe Store',
+                        'Jaya Sport',
                         style: primarytextStyle.copyWith(
                           fontSize: 15,
                         ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jogjasport/theme.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/providers/product_provider.dart';
-import 'package:shamo/theme.dart';
+
+import '../providers/product_provider.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key key}) : super(key: key);
@@ -20,21 +21,19 @@ class _SplashPageState extends State<SplashPage> {
 
   getInit() async {
     await Provider.of<ProductProvider>(context, listen: false).getProducts();
-    Navigator.pushNamed(context, '/sign-in');
+    await Provider.of<ProductProvider>(context, listen: false).getCategories();
+    Navigator.pushNamedAndRemoveUntil(context, '/sign-in', (route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: bgColor1,
-        body: Center(
-          child: Container(
-            width: 130,
-            height: 150,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/image_splash.png'),
-              ),
+        body: const Center(
+          child: CircleAvatar(
+            radius: 100,
+            backgroundImage: AssetImage(
+              'assets/logo-jogja-sport.jpg',
             ),
           ),
         ));

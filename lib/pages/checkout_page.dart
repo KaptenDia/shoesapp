@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/providers/auth_provider.dart';
-import 'package:shamo/providers/cart_provider.dart';
-import 'package:shamo/providers/transaction_provider.dart';
-import 'package:shamo/theme.dart';
-import 'package:shamo/widgets/checkout_card.dart';
+import 'package:jogjasport/providers/auth_provider.dart';
+import 'package:jogjasport/providers/cart_provider.dart';
+import 'package:jogjasport/providers/transaction_provider.dart';
+import 'package:jogjasport/theme.dart';
+import 'package:jogjasport/widgets/checkout_card.dart';
 
 import '../widgets/loading_button.dart';
 
@@ -19,21 +19,29 @@ class _CheckoutPageState extends State<CheckoutPage> {
   bool isLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of<CartProvider>(context);
     TransactionProvider transactionProvider =
         Provider.of<TransactionProvider>(context);
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
     handleCheckout() async {
       setState(() {
         isLoading = true;
       });
 
       if (await transactionProvider.checkout(
-        authProvider.user.token,
-        cartProvider.carts,
-        cartProvider.totalPrice(),
-      )) {
+          authProvider.user.token,
+          cartProvider.carts,
+          cartProvider.totalPrice(),
+          authProvider.isChanged == true
+              ? authProvider.addressController.text
+              : authProvider.user.address)) {
         cartProvider.carts = [];
         Navigator.restorablePushNamedAndRemoveUntil(
             context, '/checkout-success', (route) => false);
@@ -47,10 +55,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
     Widget header() {
       return AppBar(
         backgroundColor: bgColor1,
+        leading: GestureDetector(
+            onTap: () {
+              authProvider.addressController.clear();
+              authProvider.isChanged = false;
+              Navigator.pop(context);
+            },
+            child: const Icon(Icons.arrow_back_ios)),
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Checkout Details',
+          'Detail Checkout',
         ),
       );
     }
@@ -70,7 +85,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'List Items',
+                  'List Item',
                   style: primarytextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
@@ -100,12 +115,43 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Address Details',
-                  style: primarytextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: medium,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Detail Alamat',
+                      style: primarytextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: medium,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Ubah Alamat'),
+                              content: TextField(
+                                controller: authProvider.addressController,
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text('Simpan'),
+                                  onPressed: () {
+                                    authProvider.changeAddress(
+                                        authProvider.addressController.text);
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: const Text('Ubah Alamat'),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 12,
@@ -135,7 +181,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Store Location',
+                          'Lokasi Store',
                           style: secondarytextStyle.copyWith(
                             fontSize: 12,
                             fontWeight: light,
@@ -151,16 +197,26 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           height: defaultMargin,
                         ),
                         Text(
-                          'Your Address',
+                          'Alamat Kamu',
                           style: secondarytextStyle.copyWith(
                             fontSize: 12,
                             fontWeight: light,
                           ),
                         ),
-                        Text(
-                          'Marsemoon',
-                          style: primarytextStyle.copyWith(
-                            fontWeight: medium,
+                        SizedBox(
+                          height: 60,
+                          width: 300,
+                          child: Flexible(
+                            child: Text(
+                              authProvider.isChanged
+                                  ? authProvider.addressController.text
+                                  : authProvider.user.address,
+                              style: primarytextStyle.copyWith(
+                                fontWeight: medium,
+                              ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                       ],
@@ -185,7 +241,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Payment Summary',
+                  'Total Pembayaran',
                   style: primarytextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
@@ -198,13 +254,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Product Quantity',
+                      'Kuantitas Produk',
                       style: secondarytextStyle.copyWith(
                         fontSize: 12,
                       ),
                     ),
                     Text(
-                      '${cartProvider.totalItems()} Items',
+                      '${cartProvider.totalItems()} Produk',
                       style: primarytextStyle.copyWith(
                         fontWeight: medium,
                       ),
@@ -218,13 +274,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Product Price',
+                      'Harga Produk',
                       style: secondarytextStyle.copyWith(
                         fontSize: 12,
                       ),
                     ),
                     Text(
-                      '\$${cartProvider.totalPrice()}',
+                      'Rp.${cartProvider.totalPrice()}',
                       style: primarytextStyle.copyWith(
                         fontWeight: medium,
                       ),
@@ -238,7 +294,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Shipping',
+                      'Fee Pelayanan',
                       style: secondarytextStyle.copyWith(
                         fontSize: 12,
                       ),
@@ -271,7 +327,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                     ),
                     Text(
-                      '\$${cartProvider.totalPrice()}',
+                      'Rp.${cartProvider.totalPrice()}',
                       style: pricetextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
@@ -312,7 +368,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                     ),
                     child: Text(
-                      'Checkout Now',
+                      'Checkout',
                       style: primarytextStyle.copyWith(
                         fontWeight: semiBold,
                         fontSize: 16,
@@ -330,7 +386,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
         preferredSize: const Size.fromHeight(70),
         child: header(),
       ),
-      body: content(),
+      body: WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+          child: content()),
     );
   }
 }

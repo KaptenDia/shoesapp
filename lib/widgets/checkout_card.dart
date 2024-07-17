@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/theme.dart';
 
 import '../models/cart_model.dart';
 
@@ -23,18 +23,19 @@ class CheckoutCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              image: DecorationImage(
-                image: NetworkImage(
-                  cart.product.galleries[0].url,
+          if (cart.product.galleries.isNotEmpty)
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                image: DecorationImage(
+                  image: NetworkImage(
+                    cart.product.galleries[0].url,
+                  ),
                 ),
               ),
             ),
-          ),
           const SizedBox(
             width: 12,
           ),
@@ -53,7 +54,7 @@ class CheckoutCard extends StatelessWidget {
                   height: 2,
                 ),
                 Text(
-                  '\$${cart.product.price}',
+                  'Rp.${cart.product.price}',
                   style: pricetextStyle,
                 ),
               ],

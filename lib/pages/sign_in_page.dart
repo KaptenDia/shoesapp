@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/providers/auth_provider.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/providers/auth_provider.dart';
+import 'package:jogjasport/theme.dart';
 
 import '../widgets/loading_button.dart';
 
@@ -68,7 +68,7 @@ class _SignInPageState extends State<SignInPage> {
               height: 2,
             ),
             Text(
-              'Sign In To Continue',
+              'Login untuk melanjutkan',
               style: subtitletextStyle,
             ),
           ],
@@ -84,7 +84,7 @@ class _SignInPageState extends State<SignInPage> {
           // ignore: prefer_const_literals_to_create_immutables
           children: [
             Text(
-              'Email Addres',
+              'Alamat Email',
               style: primarytextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -117,7 +117,7 @@ class _SignInPageState extends State<SignInPage> {
                         controller: emailController,
                         style: primarytextStyle,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Your Email Address',
+                          hintText: 'Masukkan Alamat Emailmu',
                           hintStyle: subtitletextStyle,
                         ),
                       ),
@@ -173,7 +173,7 @@ class _SignInPageState extends State<SignInPage> {
                         obscureText: true,
                         style: primarytextStyle,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Your Password',
+                          hintText: 'Masukkan Passwordmu',
                           hintStyle: subtitletextStyle,
                         ),
                       ),
@@ -201,7 +201,7 @@ class _SignInPageState extends State<SignInPage> {
             ),
           ),
           child: Text(
-            'Sign In',
+            'Login',
             style: primarytextStyle.copyWith(
               fontSize: 16,
               fontWeight: medium,
@@ -218,7 +218,7 @@ class _SignInPageState extends State<SignInPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Don\'t have an account? ',
+              'Tidak punya akun? ',
               style: subtitletextStyle.copyWith(
                 fontSize: 12,
               ),
@@ -228,7 +228,7 @@ class _SignInPageState extends State<SignInPage> {
                 Navigator.pushNamed(context, '/sign-up');
               },
               child: Text(
-                'Sign Up',
+                'Daftar',
                 style: purpletextStyle.copyWith(
                   fontSize: 12,
                   fontWeight: medium,

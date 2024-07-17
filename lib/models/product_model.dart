@@ -1,12 +1,12 @@
 // @dart=2.9
 
-import 'package:shamo/models/category_model.dart';
-import 'package:shamo/models/gallery_model.dart';
+import 'package:jogjasport/models/category_model.dart';
+import 'package:jogjasport/models/gallery_model.dart';
 
 class ProductModel {
   int id;
   String name;
-  double price;
+  int price;
   String description;
   String tags;
   CategoryModel category;
@@ -29,7 +29,7 @@ class ProductModel {
   ProductModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    price = double.parse(json['price'].toString());
+    price = int.parse(json['price'].toString());
     description = json['description'];
     tags = json['tags'];
     category = CategoryModel.fromJson(json['category']);

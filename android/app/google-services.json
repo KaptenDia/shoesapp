@@ -33,6 +33,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:30081186735:android:108b9534487ef345218d5a",
+        "android_client_info": {
+          "package_name": "com.example.jogjasport"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "30081186735-hnd2b941rblt63ufi5dsc39cq4trrukg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpS1yoNltbUbyisSUKgM_j6uh8P534dO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "30081186735-hnd2b941rblt63ufi5dsc39cq4trrukg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

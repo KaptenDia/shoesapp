@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/providers/cart_provider.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/providers/cart_provider.dart';
+import 'package:jogjasport/theme.dart';
 
 import '../models/cart_model.dart';
 
@@ -30,18 +30,19 @@ class CartCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      cart.product.galleries[0].url,
+              if (cart.product.galleries.isNotEmpty)
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        cart.product.galleries[0].url,
+                      ),
                     ),
                   ),
                 ),
-              ),
               const SizedBox(
                 width: 12,
               ),
@@ -112,7 +113,7 @@ class CartCard extends StatelessWidget {
                   width: 4,
                 ),
                 Text(
-                  'Remove',
+                  'Hapus',
                   style: alerttextStyle.copyWith(
                     fontSize: 12,
                     fontWeight: light,

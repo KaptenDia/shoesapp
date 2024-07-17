@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/providers/auth_provider.dart';
-import 'package:shamo/theme.dart';
-import 'package:shamo/widgets/loading_button.dart';
+import 'package:jogjasport/providers/auth_provider.dart';
+import 'package:jogjasport/theme.dart';
+import 'package:jogjasport/widgets/loading_button.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key key}) : super(key: key);
@@ -17,6 +17,10 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController nameController = TextEditingController(text: '');
 
   TextEditingController usernameController = TextEditingController(text: '');
+
+  TextEditingController addressController = TextEditingController(text: '');
+
+  TextEditingController phoneController = TextEditingController(text: '');
 
   TextEditingController emailController = TextEditingController(text: '');
 
@@ -37,6 +41,8 @@ class _SignUpPageState extends State<SignUpPage> {
         name: nameController.text,
         username: usernameController.text,
         email: emailController.text,
+        phone: phoneController.text,
+        address: addressController.text,
         password: passwordController.text,
       )) {
         Navigator.pushNamed(context, '/home');
@@ -63,7 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
           // ignore: prefer_const_literals_to_create_immutables
           children: [
             Text(
-              'Sign Up',
+              'Daftar / Register',
               style: primarytextStyle.copyWith(
                 fontSize: 24,
                 fontWeight: semiBold,
@@ -73,7 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
               height: 2,
             ),
             Text(
-              'Register and Happy Shopping',
+              'Daftar dan Happy Shopping',
               style: subtitletextStyle,
             ),
           ],
@@ -89,7 +95,7 @@ class _SignUpPageState extends State<SignUpPage> {
           // ignore: prefer_const_literals_to_create_immutables
           children: [
             Text(
-              'Full Name',
+              'Nama Lengkap',
               style: primarytextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -122,7 +128,63 @@ class _SignUpPageState extends State<SignUpPage> {
                         controller: nameController,
                         style: primarytextStyle,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Your Full Name',
+                          hintText: 'Nama Lengkapmu',
+                          hintStyle: subtitletextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget phoneNumberInput() {
+      return Container(
+        margin: const EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            Text(
+              'Nomor Hp',
+              style: primarytextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: bgColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.phone,
+                      color: primaryColor,
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.number,
+                        style: primarytextStyle,
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'Nomor Hpmu',
                           hintStyle: subtitletextStyle,
                         ),
                       ),
@@ -177,7 +239,62 @@ class _SignUpPageState extends State<SignUpPage> {
                         controller: usernameController,
                         style: primarytextStyle,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Your Username',
+                          hintText: 'Usernamemu',
+                          hintStyle: subtitletextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget addressInput() {
+      return Container(
+        margin: const EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          // ignore: prefer_const_literals_to_create_immutables
+          children: [
+            Text(
+              'Alamat Rumah',
+              style: primarytextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: bgColor2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.location_city_rounded,
+                      color: primaryColor,
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        controller: addressController,
+                        style: primarytextStyle,
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'Alamat Rumahmu',
                           hintStyle: subtitletextStyle,
                         ),
                       ),
@@ -199,7 +316,7 @@ class _SignUpPageState extends State<SignUpPage> {
           // ignore: prefer_const_literals_to_create_immutables
           children: [
             Text(
-              'Email Addres',
+              'Alamat Email',
               style: primarytextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -232,7 +349,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         controller: emailController,
                         style: primarytextStyle,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Your Email Address',
+                          hintText: 'Alamat Emailmu',
                           hintStyle: subtitletextStyle,
                         ),
                       ),
@@ -288,7 +405,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         obscureText: true,
                         style: primarytextStyle,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Your Password',
+                          hintText: 'Passwordmu',
                           hintStyle: subtitletextStyle,
                         ),
                       ),
@@ -316,7 +433,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
           ),
           child: Text(
-            'Sign Up',
+            'Daftar',
             style: primarytextStyle.copyWith(
               fontSize: 16,
               fontWeight: medium,
@@ -333,7 +450,7 @@ class _SignUpPageState extends State<SignUpPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Already have an account? ',
+              'Sudah punya akun? ',
               style: subtitletextStyle.copyWith(
                 fontSize: 12,
               ),
@@ -343,7 +460,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 Navigator.pop(context);
               },
               child: Text(
-                'Sign In',
+                'Login',
                 style: purpletextStyle.copyWith(
                   fontSize: 12,
                   fontWeight: medium,
@@ -356,25 +473,31 @@ class _SignUpPageState extends State<SignUpPage> {
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: bgColor1,
       body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: defaultMargin,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              header(),
-              nameInput(),
-              usernameInput(),
-              emailInput(),
-              passwordInput(),
-              isLoading ? const LoadingButton() : signUpButton(),
-              const Spacer(),
-              footer(),
-            ],
+        child: SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.symmetric(
+              horizontal: defaultMargin,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                header(),
+                nameInput(),
+                usernameInput(),
+                addressInput(),
+                phoneNumberInput(),
+                emailInput(),
+                passwordInput(),
+                isLoading ? const LoadingButton() : signUpButton(),
+                const SizedBox(
+                  height: 32.0,
+                ),
+                footer(),
+              ],
+            ),
           ),
         ),
       ),

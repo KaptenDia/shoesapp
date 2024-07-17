@@ -1,10 +1,12 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
-import 'package:shamo/models/user_models.dart';
-import 'package:shamo/services/auth_service.dart';
+import 'package:jogjasport/models/user_models.dart';
+import 'package:jogjasport/services/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
   UserModel _user;
+  TextEditingController addressController = TextEditingController();
+  bool isChanged = false;
 
   UserModel get user => _user;
 
@@ -16,6 +18,8 @@ class AuthProvider with ChangeNotifier {
   Future<bool> register({
     String name,
     String username,
+    String address,
+    String phone,
     String email,
     String password,
   }) async {
@@ -23,6 +27,8 @@ class AuthProvider with ChangeNotifier {
       UserModel user = await AuthService().register(
         name: name,
         username: username,
+        address: address,
+        phone: phone,
         email: email,
         password: password,
       );
@@ -53,5 +59,11 @@ class AuthProvider with ChangeNotifier {
       print(e);
       return false;
     }
+  }
+
+  void changeAddress(String newAddress) {
+    addressController.text = newAddress;
+    isChanged = true;
+    notifyListeners();
   }
 }

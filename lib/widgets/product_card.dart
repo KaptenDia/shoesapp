@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/theme.dart';
 
 import '../models/product_model.dart';
 import '../pages/home/product_page.dart';
@@ -35,12 +35,13 @@ class ProductCard extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            Image.network(
-              product.galleries[0].url,
-              width: 215,
-              height: 150,
-              fit: BoxFit.cover,
-            ),
+            if (product.galleries.isNotEmpty)
+              Image.network(
+                product.galleries[0].url,
+                width: 215,
+                height: 150,
+                fit: BoxFit.cover,
+              ),
             Container(
               margin: const EdgeInsets.symmetric(
                 horizontal: 20,
@@ -70,7 +71,7 @@ class ProductCard extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    '\$${product.price}',
+                    'Rp.${product.price}',
                     style: pricetextStyle.copyWith(
                       fontSize: 14,
                       fontWeight: medium,

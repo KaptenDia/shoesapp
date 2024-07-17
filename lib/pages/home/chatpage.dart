@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/models/message_model.dart';
-import 'package:shamo/providers/auth_provider.dart';
-import 'package:shamo/providers/page_provider.dart';
-import 'package:shamo/services/message_service.dart';
-import 'package:shamo/theme.dart';
-import 'package:shamo/widgets/chat_tile.dart';
+import 'package:jogjasport/models/message_model.dart';
+import 'package:jogjasport/providers/auth_provider.dart';
+import 'package:jogjasport/providers/page_provider.dart';
+import 'package:jogjasport/services/message_service.dart';
+import 'package:jogjasport/theme.dart';
+import 'package:jogjasport/widgets/chat_tile.dart';
 
 class ChatPage extends StatelessWidget {
   const ChatPage({Key key}) : super(key: key);
@@ -20,7 +20,7 @@ class ChatPage extends StatelessWidget {
         backgroundColor: bgColor1,
         centerTitle: true,
         title: Text(
-          'Message Support',
+          'Chat Admin Store',
           style: primarytextStyle.copyWith(
             fontSize: 18,
             fontWeight: medium,
@@ -48,7 +48,7 @@ class ChatPage extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                'Oops no message yet?',
+                'Oops! tidak ada chat',
                 style: primarytextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: medium,
@@ -58,7 +58,7 @@ class ChatPage extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                'You have never done a transaction',
+                'Chat masih kosong!',
                 style: secondarytextStyle,
               ),
               const SizedBox(

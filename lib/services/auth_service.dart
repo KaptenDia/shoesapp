@@ -6,11 +6,13 @@ import '../models/user_models.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  String baseUrl = 'https://shamo-backend.buildwithangga.id/api';
+  String baseUrl = 'https://235c-114-10-147-154.ngrok-free.app/api';
 
   Future<UserModel> register({
     String name,
     String username,
+    String address,
+    String phone,
     String email,
     String password,
   }) async {
@@ -19,6 +21,8 @@ class AuthService {
     var body = jsonEncode({
       'name': name,
       'username': username,
+      'address': address,
+      'phone': phone,
       'email': email,
       'password': password,
     });

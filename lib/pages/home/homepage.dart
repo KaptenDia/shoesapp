@@ -1,31 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/providers/product_provider.dart';
-import 'package:shamo/theme.dart';
-import 'package:shamo/widgets/product_card.dart';
-import 'package:shamo/widgets/product_tile.dart';
+import 'package:jogjasport/providers/product_provider.dart';
+import 'package:jogjasport/theme.dart';
+import 'package:jogjasport/widgets/product_card.dart';
+import 'package:jogjasport/widgets/product_categories.dart';
+import 'package:jogjasport/widgets/product_tile.dart';
 
 import '../../models/user_models.dart';
 import '../../providers/auth_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String selectedCategory;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<ProductProvider>(context, listen: false).getProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
-    // ignore: avoid_print
-    print('Jumlah Produk HomePage: ${productProvider.products.length}');
 
     Widget header() {
       return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-          left: defaultMargin,
-          right: defaultMargin,
-        ),
+        margin: EdgeInsets.all(defaultMargin),
         child: Row(
           children: [
             Expanded(
@@ -55,7 +64,7 @@ class HomePage extends StatelessWidget {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: NetworkImage(
-                    user.profilePhotoUrl,
+                    '${user.profilePhotoUrl}&size=512',
                   ),
                 ),
               ),
@@ -66,133 +75,37 @@ class HomePage extends StatelessWidget {
     }
 
     Widget categories() {
-      return Container(
-          margin: EdgeInsets.only(
-            top: defaultMargin,
-          ),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: defaultMargin,
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  margin: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: primaryColor,
-                  ),
-                  child: Text(
-                    'All Shoes',
-                    style: primarytextStyle.copyWith(
-                      fontSize: 13,
-                      fontWeight: medium,
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            SizedBox(width: defaultMargin),
+            Row(
+              children: productProvider.categories
+                  .map(
+                    (categories) => ProductCategories(
+                      title: categories.name,
+                      isSelected: categories.name == selectedCategory,
+                      onTap: () {
+                        setState(() {
+                          selectedCategory = categories.name;
+                        });
+                        productProvider.getProductsByCategory(categories.name);
+                      },
                     ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  margin: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: subtitleColor,
-                    ),
-                    color: transparentColor,
-                  ),
-                  child: Text(
-                    'Running',
-                    style: subtitletextStyle.copyWith(
-                      fontSize: 13,
-                      fontWeight: medium,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  margin: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: subtitleColor,
-                    ),
-                    color: transparentColor,
-                  ),
-                  child: Text(
-                    'Training',
-                    style: subtitletextStyle.copyWith(
-                      fontSize: 13,
-                      fontWeight: medium,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  margin: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: subtitleColor,
-                    ),
-                    color: transparentColor,
-                  ),
-                  child: Text(
-                    'BasketBall',
-                    style: subtitletextStyle.copyWith(
-                      fontSize: 13,
-                      fontWeight: medium,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  margin: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: subtitleColor,
-                    ),
-                    color: transparentColor,
-                  ),
-                  child: Text(
-                    'Hiking',
-                    style: subtitletextStyle.copyWith(
-                      fontSize: 13,
-                      fontWeight: medium,
-                    ),
-                  ),
-                ),
-              ],
+                  )
+                  .toList(),
             ),
-          ));
+          ],
+        ),
+      );
     }
 
     Widget popularProductsTitle() {
       return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-          left: defaultMargin,
-          right: defaultMargin,
-        ),
+        margin: EdgeInsets.all(defaultMargin),
         child: Text(
-          'Popular Products',
+          'Produk Populer',
           style: primarytextStyle.copyWith(
             fontSize: 22,
             fontWeight: semiBold,
@@ -203,37 +116,30 @@ class HomePage extends StatelessWidget {
 
     Widget popularProducts() {
       return Container(
-        margin: const EdgeInsets.only(
-          top: 14,
-        ),
+        margin: EdgeInsets.symmetric(horizontal: defaultMargin),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: [
-              SizedBox(
-                width: defaultMargin,
-              ),
-              Row(
-                  children: productProvider.products
+              children: selectedCategory != null
+                  ? productProvider.filteredProducts
+                      .map(
+                        (product) => ProductCard(product),
+                      )
+                      .toList()
+                  : productProvider.products
                       .map(
                         (product) => ProductCard(product),
                       )
                       .toList()),
-            ],
-          ),
         ),
       );
     }
 
     Widget newArrivalsTitle() {
       return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-          left: defaultMargin,
-          right: defaultMargin,
-        ),
+        margin: EdgeInsets.all(defaultMargin),
         child: Text(
-          'New Arrivals',
+          'Produk Terbaru',
           style: primarytextStyle.copyWith(
             fontSize: 22,
             fontWeight: semiBold,
@@ -244,28 +150,44 @@ class HomePage extends StatelessWidget {
 
     Widget newArrivals() {
       return Container(
-        margin: const EdgeInsets.only(
-          top: 14,
-        ),
+        margin: EdgeInsets.all(defaultMargin),
         child: Column(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: productProvider.products
-              .map(
-                (product) => ProductTile(product),
-              )
-              .toList(),
-        ),
+            children: selectedCategory != null
+                ? productProvider.filteredProducts
+                    .map(
+                      (product) => ProductTile(product),
+                    )
+                    .toList()
+                : productProvider.products
+                    .map(
+                      (product) => ProductTile(product),
+                    )
+                    .toList()),
       );
     }
 
     return ListView(
       children: [
         header(),
-        newArrivalsTitle(),
-        newArrivals(),
-        categories(),
-        popularProductsTitle(),
-        popularProducts(),
+        const SizedBox(height: 12.0),
+        Center(
+          child: Text(
+            'Data masih kosong',
+            style: primarytextStyle,
+          ),
+        ),
+        if (productProvider.filteredProducts.isNotEmpty ||
+            productProvider.products.isNotEmpty)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              categories(),
+              popularProductsTitle(),
+              popularProducts(),
+              newArrivalsTitle(),
+              newArrivals(),
+            ],
+          ),
       ],
     );
   }

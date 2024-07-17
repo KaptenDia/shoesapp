@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shamo/models/product_model.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/models/product_model.dart';
+import 'package:jogjasport/theme.dart';
 
 class ChatBubble extends StatelessWidget {
   final String text;
@@ -19,7 +19,7 @@ class ChatBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget productPreview() {
       return Container(
-        width: 230,
+        width: 380,
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -35,13 +35,14 @@ class ChatBubble extends StatelessWidget {
           children: [
             Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    product.galleries[0].url,
-                    width: 70,
+                if (product.galleries.isNotEmpty)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      product.galleries[1].url,
+                      width: 70,
+                    ),
                   ),
-                ),
                 const SizedBox(
                   width: 8,
                 ),
@@ -83,7 +84,7 @@ class ChatBubble extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Add To Cart',
+                    'Tambahkan Ke Keranjang',
                     style: purpletextStyle,
                   ),
                 ),
@@ -99,7 +100,7 @@ class ChatBubble extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Buy Now',
+                    'Beli Sekarang',
                     style: GoogleFonts.poppins(
                       color: bgColor5,
                       fontWeight: medium,

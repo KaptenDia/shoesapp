@@ -1,20 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:jogjasport/pages/order_page.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/pages/cart_page.dart';
-import 'package:shamo/pages/checkout_page.dart';
-import 'package:shamo/pages/checkout_success_page.dart';
-import 'package:shamo/pages/home/edit_profile_page.dart';
-import 'package:shamo/pages/home/mainpage.dart';
-import 'package:shamo/pages/sign_in_page.dart';
-import 'package:shamo/pages/sign_up_page.dart';
-import 'package:shamo/pages/splashpage.dart';
-import 'package:shamo/providers/auth_provider.dart';
-import 'package:shamo/providers/cart_provider.dart';
-import 'package:shamo/providers/page_provider.dart';
-import 'package:shamo/providers/product_provider.dart';
-import 'package:shamo/providers/transaction_provider.dart';
-import 'package:shamo/providers/wishlist_provider.dart';
+import 'package:jogjasport/pages/cart_page.dart';
+import 'package:jogjasport/pages/checkout_page.dart';
+import 'package:jogjasport/pages/checkout_success_page.dart';
+import 'package:jogjasport/pages/home/edit_profile_page.dart';
+import 'package:jogjasport/pages/home/mainpage.dart';
+import 'package:jogjasport/pages/sign_in_page.dart';
+import 'package:jogjasport/pages/sign_up_page.dart';
+import 'package:jogjasport/pages/splashpage.dart';
+import 'package:jogjasport/providers/auth_provider.dart';
+import 'package:jogjasport/providers/cart_provider.dart';
+import 'package:jogjasport/providers/page_provider.dart';
+import 'package:jogjasport/providers/product_provider.dart';
+import 'package:jogjasport/providers/transaction_provider.dart';
+import 'package:jogjasport/providers/wishlist_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
           '/cart': (context) => const CartPage(),
           '/checkout': (context) => const CheckoutPage(),
           '/checkout-success': (context) => const CheckoutSuccessPage(),
+          '/order-page': (context) => const OrderPage(),
         },
       ),
     );

@@ -1,4 +1,4 @@
-import 'package:shamo/models/product_model.dart';
+import 'package:jogjasport/models/product_model.dart';
 
 class CartModel {
   int id;
@@ -25,7 +25,7 @@ class CartModel {
     };
   }
 
-  double getTotalPrice() {
+  getTotalPrice() {
     return product.price * quantity;
   }
 }

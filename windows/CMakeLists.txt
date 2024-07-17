@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(shamo LANGUAGES CXX)
+project(jogjasport LANGUAGES CXX)
 
-set(BINARY_NAME "shamo")
+set(BINARY_NAME "jogjasport")
 
 cmake_policy(SET CMP0063 NEW)
 

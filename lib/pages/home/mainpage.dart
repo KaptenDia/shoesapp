@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/pages/home/chatpage.dart';
-import 'package:shamo/pages/home/homepage.dart';
-import 'package:shamo/pages/home/profilepage.dart';
-import 'package:shamo/pages/home/wishlistpage.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/pages/home/chatpage.dart';
+import 'package:jogjasport/pages/home/homepage.dart';
+import 'package:jogjasport/pages/home/profilepage.dart';
+import 'package:jogjasport/pages/home/wishlistpage.dart';
+import 'package:jogjasport/theme.dart';
 
 import '../../providers/page_provider.dart';
 

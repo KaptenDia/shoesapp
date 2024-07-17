@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/providers/wishlist_provider.dart';
-import 'package:shamo/theme.dart';
-import 'package:shamo/widgets/wishlist_card.dart';
+import 'package:jogjasport/providers/wishlist_provider.dart';
+import 'package:jogjasport/theme.dart';
+import 'package:jogjasport/widgets/wishlist_card.dart';
 
 import '../../providers/page_provider.dart';
 
@@ -18,8 +18,12 @@ class WishList extends StatelessWidget {
       return AppBar(
         backgroundColor: bgColor1,
         centerTitle: true,
-        title: const Text(
-          'Favorite Shoes',
+        title: Text(
+          'Wishlist Sepatu',
+          style: primarytextStyle.copyWith(
+            fontSize: 18,
+            fontWeight: medium,
+          ),
         ),
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -43,7 +47,7 @@ class WishList extends StatelessWidget {
                 height: 23,
               ),
               Text(
-                'You don\'t have dream shoes?',
+                'Kamu belum menemukan sepatu impian?',
                 style: primarytextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: medium,
@@ -53,7 +57,7 @@ class WishList extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                'Let\'s find your favorite shoes',
+                'Yuk cari sepatu impianmu!',
                 style: secondarytextStyle,
               ),
               const SizedBox(

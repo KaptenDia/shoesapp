@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shamo/models/user_models.dart';
-import 'package:shamo/providers/auth_provider.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/models/user_models.dart';
+import 'package:jogjasport/providers/auth_provider.dart';
+import 'package:jogjasport/theme.dart';
 
 class EditProfilePage extends StatelessWidget {
   const EditProfilePage({Key key}) : super(key: key);
@@ -100,6 +100,68 @@ class EditProfilePage extends StatelessWidget {
       );
     }
 
+    Widget addressInput() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 30,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Alamat Rumah',
+              style: secondarytextStyle.copyWith(
+                fontSize: 13,
+              ),
+            ),
+            TextFormField(
+              style: primarytextStyle,
+              decoration: InputDecoration(
+                hintText: user.address,
+                hintStyle: primarytextStyle,
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: subtitleColor,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget phoneInput() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 30,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Nomor HP',
+              style: secondarytextStyle.copyWith(
+                fontSize: 13,
+              ),
+            ),
+            TextFormField(
+              style: primarytextStyle,
+              decoration: InputDecoration(
+                hintText: user.phone,
+                hintStyle: primarytextStyle,
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: subtitleColor,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     Widget emailInput() {
       return Container(
         margin: const EdgeInsets.only(
@@ -151,13 +213,15 @@ class EditProfilePage extends StatelessWidget {
                 image: DecorationImage(
                   fit: BoxFit.fill,
                   image: NetworkImage(
-                    user.profilePhotoUrl,
+                    '${user.profilePhotoUrl}&size=512',
                   ),
                 ),
               ),
             ),
             nameInput(),
             usernameInput(),
+            addressInput(),
+            phoneInput(),
             emailInput(),
           ],
         ),

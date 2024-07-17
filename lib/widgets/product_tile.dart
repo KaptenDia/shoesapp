@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shamo/models/product_model.dart';
-import 'package:shamo/pages/home/product_page.dart';
-import 'package:shamo/theme.dart';
+import 'package:jogjasport/models/product_model.dart';
+import 'package:jogjasport/pages/home/product_page.dart';
+import 'package:jogjasport/theme.dart';
 
 class ProductTile extends StatelessWidget {
   final ProductModel product;
@@ -26,15 +26,16 @@ class ProductTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                product.galleries[0].url,
-                width: 120,
-                height: 120,
-                fit: BoxFit.cover,
+            if (product.galleries.isNotEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(
+                  product.galleries[0].url,
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
             const SizedBox(
               width: 12,
             ),
@@ -63,7 +64,7 @@ class ProductTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    '\$${product.price}',
+                    'Rp.${product.price}',
                     style: pricetextStyle.copyWith(
                       fontWeight: medium,
                     ),
