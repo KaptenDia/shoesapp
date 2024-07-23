@@ -4,6 +4,8 @@ import 'package:jogjasport/models/product_model.dart';
 
 class CartProvider with ChangeNotifier {
   List<CartModel> _carts = [];
+  String imgProofPath;
+  String imgProofName;
 
   List<CartModel> get carts => _carts;
 

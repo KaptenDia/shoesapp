@@ -44,7 +44,7 @@ class CheckoutCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  cart.product.name,
+                  cart.product.brandId,
                   style: primarytextStyle.copyWith(
                     fontWeight: semiBold,
                   ),

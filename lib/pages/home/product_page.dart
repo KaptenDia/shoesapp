@@ -5,8 +5,7 @@ import 'package:jogjasport/models/product_model.dart';
 import 'package:jogjasport/providers/cart_provider.dart';
 import 'package:jogjasport/providers/wishlist_provider.dart';
 import 'package:jogjasport/theme.dart';
-
-import 'detail_chat_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductPage extends StatefulWidget {
   final ProductModel product;
@@ -17,24 +16,24 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  // List images = [
-  //   'assets/image_shoes.png',
-  //   'assets/image_shoes.png',
-  //   'assets/image_shoes.png',
-  // ];
-
-  // List familiarShoes = [
-  //   'assets/image_shoes.png',
-  //   'assets/image_shoes2.png',
-  //   'assets/image_shoes3.png',
-  //   'assets/image_shoes4.png',
-  //   'assets/image_shoes5.png',
-  //   'assets/image_shoes6.png',
-  //   'assets/image_shoes7.png',
-  //   'assets/image_shoes8.png',
-  // ];
-
   int currentIndex = 0;
+
+  Future<void> launchWhatsappWithMobileNumber(String message) async {
+    final url = "whatsapp://send?phone=6281341206957&text=$message";
+    if (await canLaunchUrl(Uri.parse(Uri.encodeFull(url)))) {
+      await launchUrl(Uri.parse(Uri.encodeFull(url)));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: alertColor,
+          content: const Text(
+            'Gagal membuka whatsapp',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,16 +180,25 @@ class _ProductPageState extends State<ProductPage> {
             height: 24.0,
           ),
           CarouselSlider(
-            items: widget.product.galleries
-                .map(
-                  (image) => Image.network(
-                    image.url,
-                    width: MediaQuery.of(context).size.width,
-                    height: 310,
-                    fit: BoxFit.cover,
-                  ),
-                )
-                .toList(),
+            items: widget.product.galleries.isNotEmpty
+                ? widget.product.galleries
+                    .map(
+                      (image) => Image.network(
+                        image.url,
+                        width: MediaQuery.of(context).size.width,
+                        height: 310,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                    .toList()
+                : [
+                    Image.network(
+                      "https://via.placeholder.com/200x200",
+                      width: double.infinity,
+                      height: 200.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ],
             options: CarouselOptions(
               initialPage: 0,
               onPageChanged: (index, reason) {
@@ -240,7 +248,7 @@ class _ProductPageState extends State<ProductPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.product.name,
+                          widget.product.brandId,
                           style: primarytextStyle.copyWith(
                             fontSize: 32,
                             fontWeight: semiBold,
@@ -255,38 +263,51 @@ class _ProductPageState extends State<ProductPage> {
                       ],
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      wishlistProvider.setProduct(widget.product);
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          wishlistProvider.setProduct(widget.product);
 
-                      if (wishlistProvider.isWishlist(widget.product)) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: secondaryColor,
-                            content: const Text(
-                              'Telah ditambahkan ke WishList',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: alertColor,
-                            content: const Text(
-                              'Telah dihapus dari WishList',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    child: Image.asset(
-                      wishlistProvider.isWishlist(widget.product)
-                          ? 'assets/button_wishlist_blue.png'
-                          : 'assets/button_wishlist.png',
-                      width: 46,
-                    ),
+                          if (wishlistProvider.isWishlist(widget.product)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: secondaryColor,
+                                content: const Text(
+                                  'Telah ditambahkan ke WishList',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: alertColor,
+                                content: const Text(
+                                  'Telah dihapus dari WishList',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        child: Image.asset(
+                          wishlistProvider.isWishlist(widget.product)
+                              ? 'assets/button_wishlist_blue.png'
+                              : 'assets/button_wishlist.png',
+                          width: 46,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                      Text(
+                        'Stok : ${widget.product.stock.toString()}',
+                        style: primarytextStyle.copyWith(
+                          fontWeight: bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -367,14 +388,9 @@ class _ProductPageState extends State<ProductPage> {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailChatPage(widget.product),
-                        ),
-                      );
-                    },
+                    onTap: () async => await launchWhatsappWithMobileNumber(
+                      'Hai apakah ${widget.product.brandId} masih ada?',
+                    ),
                     child: Container(
                       width: 54,
                       height: 54,
@@ -394,21 +410,28 @@ class _ProductPageState extends State<ProductPage> {
                     child: SizedBox(
                       height: 54,
                       child: TextButton(
-                        onPressed: () {
-                          cartProvider.addCart(widget.product);
-                          showSuccessDialog();
-                        },
+                        onPressed: widget.product.stock > 0
+                            ? () {
+                                cartProvider.addCart(widget.product);
+                                showSuccessDialog();
+                              }
+                            : null,
                         style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          backgroundColor: primaryColor,
+                          backgroundColor: widget.product.stock > 0
+                              ? primaryColor
+                              : Colors.grey,
                         ),
                         child: Text(
                           'Tambahkan Ke Keranjang',
                           style: primarytextStyle.copyWith(
                             fontSize: 16,
                             fontWeight: semiBold,
+                            color: widget.product.stock > 0
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                       ),

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:jogjasport/pages/order_page.dart';
+import 'package:jogjasport/util.dart';
 import 'package:provider/provider.dart';
 import 'package:jogjasport/pages/cart_page.dart';
 import 'package:jogjasport/pages/checkout_page.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+        navigatorKey: Util.navigatorKey,
         theme: ThemeData(),
         debugShowCheckedModeBanner: false,
         routes: {

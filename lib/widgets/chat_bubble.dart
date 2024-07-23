@@ -51,7 +51,7 @@ class ChatBubble extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.name,
+                        product.brandId,
                         style: primarytextStyle,
                       ),
                       const SizedBox(

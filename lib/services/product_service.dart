@@ -5,13 +5,12 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:jogjasport/models/category_model.dart';
 import 'package:jogjasport/models/product_model.dart';
+import 'package:jogjasport/util.dart';
 
 class ProductService {
-  String baseUrl = 'https://235c-114-10-147-154.ngrok-free.app/api';
-
   // ignore: missing_return
   Future<List<ProductModel>> getProducts() async {
-    var url = '$baseUrl/products';
+    var url = '${Util.baseUrl}/products';
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(Uri.parse(url), headers: headers);
@@ -20,7 +19,7 @@ class ProductService {
     print(response.body);
 
     if (response.statusCode == 200) {
-      List data = jsonDecode(response.body)['data']['data'];
+      List data = jsonDecode(response.body)['data'];
       List<ProductModel> products = [];
 
       for (var item in data) {
@@ -36,7 +35,7 @@ class ProductService {
 
   // ignore: missing_return
   Future<List<CategoryModel>> getCategories() async {
-    var url = '$baseUrl/categories';
+    var url = '${Util.baseUrl}/categories';
     var headers = {'Content-Type': 'application/json'};
 
     var response = await http.get(Uri.parse(url), headers: headers);

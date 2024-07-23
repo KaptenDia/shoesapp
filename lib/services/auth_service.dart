@@ -5,9 +5,9 @@ import 'dart:convert';
 import '../models/user_models.dart';
 import 'package:http/http.dart' as http;
 
-class AuthService {
-  String baseUrl = 'https://235c-114-10-147-154.ngrok-free.app/api';
+import '../util.dart';
 
+class AuthService {
   Future<UserModel> register({
     String name,
     String username,
@@ -16,7 +16,7 @@ class AuthService {
     String email,
     String password,
   }) async {
-    var url = '$baseUrl/register';
+    var url = '${Util.baseUrl}/register';
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode({
       'name': name,
@@ -43,9 +43,8 @@ class AuthService {
 
       return user;
     } else {
-      throw Exception(
-        'Ada Kesalahan Register',
-      );
+      var errorMessage = jsonDecode(response.body)['message'];
+      throw Exception(errorMessage);
     }
   }
 
@@ -53,7 +52,7 @@ class AuthService {
     String email,
     String password,
   }) async {
-    var url = '$baseUrl/login';
+    var url = '${Util.baseUrl}/login';
     var headers = {'Content-Type': 'application/json'};
     var body = jsonEncode({
       'email': email,
@@ -79,6 +78,53 @@ class AuthService {
       throw Exception(
         'Ada Kesalahan Saat Login',
       );
+    }
+  }
+
+  Future<UserModel> updateProfile({
+    String name,
+    String address,
+    String phone,
+    String email,
+    String token,
+  }) async {
+    var url = '${Util.baseUrl}/update-user';
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    var body = jsonEncode({
+      'name': name,
+      'address': address,
+      'phone': phone,
+      'email': email,
+    });
+
+    var response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: body,
+    );
+
+    print('Response body: ${response.body}');
+
+    try {
+      if (response.statusCode == 200) {
+        var responseBody = jsonDecode(response.body);
+        var data = responseBody['data'];
+        if (data != null) {
+          UserModel user = UserModel.fromJson(data);
+          return user;
+        } else {
+          throw Exception('Data is null');
+        }
+      } else {
+        var responseBody = jsonDecode(response.body);
+        var errorMessage = responseBody['message'];
+        throw Exception(errorMessage ?? 'Unknown error');
+      }
+    } catch (e) {
+      throw Exception('Failed to parse response: $e');
     }
   }
 }

@@ -4,13 +4,85 @@ import 'package:jogjasport/models/user_models.dart';
 import 'package:jogjasport/providers/auth_provider.dart';
 import 'package:jogjasport/theme.dart';
 
-class EditProfilePage extends StatelessWidget {
-  const EditProfilePage({Key key}) : super(key: key);
+class EditProfilePage extends StatefulWidget {
+  const EditProfilePage({key}) : super(key: key);
+
+  @override
+  State<EditProfilePage> createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
+  TextEditingController nameController;
+  TextEditingController emailController;
+  TextEditingController addressController;
+  TextEditingController phoneController;
+  bool isLoading = false;
+
+  @override
+  @override
+  void initState() {
+    super.initState();
+    isLoading = false;
+    final AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    final UserModel user = authProvider.user;
+
+    nameController = TextEditingController(text: user.name);
+    emailController = TextEditingController(text: user.email);
+    addressController = TextEditingController(text: user.address);
+    phoneController = TextEditingController(text: user.phone);
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    addressController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModel user = authProvider.user;
+
+    handleUpdateProfile() async {
+      setState(() {
+        isLoading = true;
+      });
+      try {
+        await authProvider.updateProfile(
+          name: nameController.text,
+          email: emailController.text,
+          address: addressController.text,
+          phone: phoneController.text,
+          token: user.token,
+        );
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: primaryColor,
+          content: const Text(
+            'Berhasil Update Profile',
+            textAlign: TextAlign.center,
+          ),
+        ));
+        Navigator.pop(context);
+      } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: alertColor,
+          content: Text(
+            e.toString(),
+            textAlign: TextAlign.center,
+          ),
+        ));
+      }
+    }
 
     Widget header(BuildContext context) {
       return AppBar(
@@ -32,7 +104,7 @@ class EditProfilePage extends StatelessWidget {
               Icons.check,
               color: primaryColor,
             ),
-            onPressed: () {},
+            onPressed: handleUpdateProfile,
           ),
         ],
       );
@@ -47,46 +119,16 @@ class EditProfilePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Name',
+              'Nama',
               style: secondarytextStyle.copyWith(
                 fontSize: 13,
               ),
             ),
             TextFormField(
+              controller: nameController,
               style: primarytextStyle,
               decoration: InputDecoration(
-                hintText: user.name,
-                hintStyle: primarytextStyle,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: subtitleColor,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget usernameInput() {
-      return Container(
-        margin: const EdgeInsets.only(
-          top: 30,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Username',
-              style: secondarytextStyle.copyWith(
-                fontSize: 13,
-              ),
-            ),
-            TextFormField(
-              style: primarytextStyle,
-              decoration: InputDecoration(
-                hintText: '@${user.username}',
+                hintText: 'Input nama',
                 hintStyle: primarytextStyle,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -115,9 +157,10 @@ class EditProfilePage extends StatelessWidget {
               ),
             ),
             TextFormField(
+              controller: addressController,
               style: primarytextStyle,
               decoration: InputDecoration(
-                hintText: user.address,
+                hintText: 'Input alamat',
                 hintStyle: primarytextStyle,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -146,9 +189,10 @@ class EditProfilePage extends StatelessWidget {
               ),
             ),
             TextFormField(
+              controller: phoneController,
               style: primarytextStyle,
               decoration: InputDecoration(
-                hintText: user.phone,
+                hintText: 'Input nomor HP',
                 hintStyle: primarytextStyle,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -171,15 +215,16 @@ class EditProfilePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Email Address',
+              'Alamat Email',
               style: secondarytextStyle.copyWith(
                 fontSize: 13,
               ),
             ),
             TextFormField(
+              controller: emailController,
               style: primarytextStyle,
               decoration: InputDecoration(
-                hintText: user.email,
+                hintText: 'Input email',
                 hintStyle: primarytextStyle,
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -219,7 +264,6 @@ class EditProfilePage extends StatelessWidget {
               ),
             ),
             nameInput(),
-            usernameInput(),
             addressInput(),
             phoneInput(),
             emailInput(),
@@ -234,8 +278,10 @@ class EditProfilePage extends StatelessWidget {
         preferredSize: const Size.fromHeight(100),
         child: header(context),
       ),
-      body: content(),
-      resizeToAvoidBottomInset: false,
+      body: isLoading == true
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(child: content()),
+      resizeToAvoidBottomInset: true,
     );
   }
 }

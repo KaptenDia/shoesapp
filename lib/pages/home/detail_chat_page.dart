@@ -110,7 +110,7 @@ class _DetailChatPageState extends State<DetailChatPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.product.name,
+                    widget.product.brandId,
                     style: primarytextStyle,
                     overflow: TextOverflow.ellipsis,
                   ),

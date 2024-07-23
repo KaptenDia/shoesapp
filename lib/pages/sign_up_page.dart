@@ -16,8 +16,6 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   TextEditingController nameController = TextEditingController(text: '');
 
-  TextEditingController usernameController = TextEditingController(text: '');
-
   TextEditingController addressController = TextEditingController(text: '');
 
   TextEditingController phoneController = TextEditingController(text: '');
@@ -37,20 +35,38 @@ class _SignUpPageState extends State<SignUpPage> {
         isLoading = true;
       });
 
-      if (await authProvider.register(
-        name: nameController.text,
-        username: usernameController.text,
-        email: emailController.text,
-        phone: phoneController.text,
-        address: addressController.text,
-        password: passwordController.text,
-      )) {
-        Navigator.pushNamed(context, '/home');
-      } else {
+      if (nameController.text == '' ||
+          emailController.text == '' ||
+          phoneController.text == '' ||
+          addressController.text == '' ||
+          passwordController.text == '') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: alertColor,
           content: const Text(
-            'Kesalahan Register!',
+            'Mohon lengkapi semua data!',
+            textAlign: TextAlign.center,
+          ),
+        ));
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
+
+      try {
+        await authProvider.register(
+          name: nameController.text,
+          address: addressController.text,
+          phone: phoneController.text,
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        Navigator.pushNamed(context, '/home');
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: alertColor,
+          content: Text(
+            e.toString(),
             textAlign: TextAlign.center,
           ),
         ));
@@ -185,61 +201,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         style: primarytextStyle,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Nomor Hpmu',
-                          hintStyle: subtitletextStyle,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget usernameInput() {
-      return Container(
-        margin: const EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            Text(
-              'Username',
-              style: primarytextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
-              decoration: BoxDecoration(
-                color: bgColor2,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/icon_username.png',
-                      width: 17,
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        controller: usernameController,
-                        style: primarytextStyle,
-                        decoration: InputDecoration.collapsed(
-                          hintText: 'Usernamemu',
                           hintStyle: subtitletextStyle,
                         ),
                       ),
@@ -486,7 +447,6 @@ class _SignUpPageState extends State<SignUpPage> {
               children: [
                 header(),
                 nameInput(),
-                usernameInput(),
                 addressInput(),
                 phoneNumberInput(),
                 emailInput(),

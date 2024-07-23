@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:jogjasport/util.dart';
 
 import '../models/cart_model.dart';
+import '../models/transaction_model.dart';
 
 class TransactionService {
-  String baseUrl = 'https://235c-114-10-147-154.ngrok-free.app/api';
-
   Future<bool> checkout(String token, List<CartModel> carts, double totalPrice,
-      String address) async {
-    var url = '$baseUrl/checkout';
+      String address, String paymentProof) async {
+    var url = '${Util.baseUrl}/checkout';
     var headers = {
       'Content-Type': 'application/json',
-      'Authorization': token,
+      'Authorization': 'Bearer $token',
     };
     var body = jsonEncode({
       'address': address,
@@ -24,8 +24,8 @@ class TransactionService {
           )
           .toList(),
       'status': 'PENDING',
+      'payment_proof': paymentProof,
       'total_price': totalPrice,
-      'shipping_price': 0,
     });
 
     var response = await http.post(
@@ -41,6 +41,24 @@ class TransactionService {
       return true;
     } else {
       throw Exception('Gagal Melakukan Checkout');
+    }
+  }
+
+  Future<List<Data>> getTransactions(String token) async {
+    var url = '${Util.baseUrl}/your-order';
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    var response = await http.get(Uri.parse(url), headers: headers);
+
+    if (response.statusCode == 200) {
+      List data = jsonDecode(response.body)['data'];
+      List<Data> transactions =
+          data.map((item) => Data.fromJson(item)).toList();
+      return transactions;
+    } else {
+      throw Exception('Failed to get transactions');
     }
   }
 }

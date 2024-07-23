@@ -26,16 +26,25 @@ class ProductTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            if (product.galleries.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  product.galleries[0].url,
-                  width: 120,
-                  height: 120,
-                  fit: BoxFit.cover,
-                ),
-              ),
+            product.galleries.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      product.galleries[0].url,
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      'https://via.placeholder.com/120x120',
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
             const SizedBox(
               width: 12,
             ),
@@ -53,12 +62,13 @@ class ProductTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    product.name,
+                    '${product.brandId} ${product.type}',
                     style: primarytextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(
                     height: 6,

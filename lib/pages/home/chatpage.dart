@@ -6,6 +6,7 @@ import 'package:jogjasport/providers/page_provider.dart';
 import 'package:jogjasport/services/message_service.dart';
 import 'package:jogjasport/theme.dart';
 import 'package:jogjasport/widgets/chat_tile.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ChatPage extends StatelessWidget {
   const ChatPage({Key key}) : super(key: key);
@@ -14,6 +15,24 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     PageProvider pageProvider = Provider.of<PageProvider>(context);
+
+    Future<void> launchWhatsappWithMobileNumber(String message) async {
+      final url =
+          "whatsapp://send?phone=6281341206957&text=${Uri.encodeComponent(message)}";
+      if (await canLaunchUrlString(url)) {
+        await launchUrlString(url);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: alertColor,
+            content: const Text(
+              'Gagal membuka WhatsApp',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+      }
+    }
 
     Widget header() {
       return AppBar(
@@ -48,7 +67,7 @@ class ChatPage extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                'Oops! tidak ada chat',
+                'Chat admin via Whatsapp',
                 style: primarytextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: medium,
@@ -58,7 +77,7 @@ class ChatPage extends StatelessWidget {
                 height: 12,
               ),
               Text(
-                'Chat masih kosong!',
+                'Chat untuk dapatkan info tentang product!',
                 style: secondarytextStyle,
               ),
               const SizedBox(
@@ -68,9 +87,9 @@ class ChatPage extends StatelessWidget {
               Container(
                 height: 44,
                 child: TextButton(
-                  onPressed: () {
-                    pageProvider.currentIndex = 0;
-                  },
+                  onPressed: () => launchWhatsappWithMobileNumber(
+                    'Hello, saya ingin menanyakan product dari JogjaSport.',
+                  ),
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
@@ -82,7 +101,7 @@ class ChatPage extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    'Explore Store',
+                    'Chat Whatsapp',
                     style: primarytextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: medium,

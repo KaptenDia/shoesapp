@@ -21,10 +21,6 @@ class ProductCard extends StatelessWidget {
       },
       child: Container(
         width: 215,
-        height: 278,
-        margin: EdgeInsets.only(
-          right: defaultMargin,
-        ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: const Color(0xffECEDEF),
@@ -41,6 +37,10 @@ class ProductCard extends StatelessWidget {
                 width: 215,
                 height: 150,
                 fit: BoxFit.cover,
+              ),
+            if (product.galleries.isEmpty)
+              Image.network(
+                'https://via.placeholder.com/220x150',
               ),
             Container(
               margin: const EdgeInsets.symmetric(
@@ -59,13 +59,13 @@ class ProductCard extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    product.name,
+                    '${product.brandId} ${product.type} adsfasdfasdf',
                     style: blacktextStyle.copyWith(
                       fontSize: 18,
                       fontWeight: semiBold,
                     ),
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    maxLines: 2,
                   ),
                   const SizedBox(
                     height: 6,
@@ -76,6 +76,9 @@ class ProductCard extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: medium,
                     ),
+                  ),
+                  const SizedBox(
+                    height: 12.0,
                   ),
                 ],
               ),

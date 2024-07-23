@@ -29,6 +29,19 @@ class _SignInPageState extends State<SignInPage> {
       setState(() {
         isLoading = true;
       });
+      if (emailController.text == '' || passwordController.text == '') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: alertColor,
+          content: const Text(
+            'Email dan Password harus diisi!',
+            textAlign: TextAlign.center,
+          ),
+        ));
+        setState(() {
+          isLoading = false;
+        });
+        return;
+      }
 
       if (await authProvider.login(
         email: emailController.text,
@@ -39,7 +52,7 @@ class _SignInPageState extends State<SignInPage> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: alertColor,
           content: const Text(
-            'Kesalahan Login!',
+            'Alamat Email atau Password salah!',
             textAlign: TextAlign.center,
           ),
         ));

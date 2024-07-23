@@ -30,7 +30,7 @@ class CheckoutSuccessPage extends StatelessWidget {
               height: 20,
             ),
             Text(
-              'You made a transaction',
+              'Transaksi Berhasil',
               style: primarytextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -40,7 +40,7 @@ class CheckoutSuccessPage extends StatelessWidget {
               height: 12,
             ),
             Text(
-              'Stay at home while we\nprepare your dream shoes',
+              'Tunggu konfirmasi dari kami ya!',
               style: secondarytextStyle,
               textAlign: TextAlign.center,
             ),
@@ -62,34 +62,10 @@ class CheckoutSuccessPage extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Order Other Shoes',
+                  'Pesan Sepatu Lainnya',
                   style: primarytextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: 196,
-              height: 44,
-              margin: const EdgeInsets.only(
-                top: 12,
-              ),
-              child: TextButton(
-                onPressed: () {},
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color(0xff39374B),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  'View My Order',
-                  style: primarytextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: medium,
-                    color: const Color(0xffB7B6BF),
                   ),
                 ),
               ),

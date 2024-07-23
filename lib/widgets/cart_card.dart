@@ -51,12 +51,12 @@ class CartCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cart.product.name,
+                      cart.product.brandId,
                       style: primarytextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
                     ),
-                    Text('\$${cart.product.price}', style: pricetextStyle),
+                    Text('Rp.${cart.product.price}', style: pricetextStyle),
                   ],
                 ),
               ),

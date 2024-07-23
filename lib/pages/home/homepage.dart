@@ -21,7 +21,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<ProductProvider>(context, listen: false).getProducts();
   }
@@ -46,12 +45,6 @@ class _HomePageState extends State<HomePage> {
                     style: primarytextStyle.copyWith(
                       fontSize: 24,
                       fontWeight: semiBold,
-                    ),
-                  ),
-                  Text(
-                    '@${user.username}',
-                    style: subtitletextStyle.copyWith(
-                      fontSize: 16,
                     ),
                   ),
                 ],
@@ -170,12 +163,14 @@ class _HomePageState extends State<HomePage> {
       children: [
         header(),
         const SizedBox(height: 12.0),
-        Center(
-          child: Text(
-            'Data masih kosong',
-            style: primarytextStyle,
+        if (productProvider.filteredProducts.isEmpty &&
+            productProvider.products.isEmpty)
+          Center(
+            child: Text(
+              'Data masih kosong',
+              style: primarytextStyle,
+            ),
           ),
-        ),
         if (productProvider.filteredProducts.isNotEmpty ||
             productProvider.products.isNotEmpty)
           Column(

@@ -5,8 +5,10 @@ import 'package:jogjasport/models/gallery_model.dart';
 
 class ProductModel {
   int id;
-  String name;
+  String brandId;
+  String type;
   int price;
+  int stock;
   String description;
   String tags;
   CategoryModel category;
@@ -16,8 +18,9 @@ class ProductModel {
 
   ProductModel({
     this.id,
-    this.name,
+    this.brandId,
     this.price,
+    this.stock,
     this.description,
     this.tags,
     this.category,
@@ -28,14 +31,27 @@ class ProductModel {
 
   ProductModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
+    stock = json['stock'];
+    brandId = json['brand_name'];
+    type = json['type'];
     price = int.parse(json['price'].toString());
     description = json['description'];
     tags = json['tags'];
     category = CategoryModel.fromJson(json['category']);
-    galleries = json['galleries']
-        .map<GalleryModel>((gallery) => GalleryModel.fromJson(gallery))
-        .toList();
+
+    // Preprocess gallery URLs
+    galleries =
+        (json['galleries'] as List<dynamic>).map<GalleryModel>((gallery) {
+      // Assuming GalleryModel.fromJson handles the URL transformation
+      GalleryModel galleryModel = GalleryModel.fromJson(gallery);
+      // Update the URL here
+      galleryModel.url = galleryModel.url.replaceFirst(
+        'http://localhost:8000',
+        'https://298d-114-10-144-211.ngrok-free.app',
+      );
+      return galleryModel;
+    }).toList();
+
     createdAt =
         json['created_at'] != null ? DateTime.parse(json['created_at']) : null;
     updatedAt =
@@ -45,7 +61,9 @@ class ProductModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
+      'stock': stock,
+      'brand_name': brandId,
+      'type': type,
       'price': price,
       'description': description,
       'tags': tags,

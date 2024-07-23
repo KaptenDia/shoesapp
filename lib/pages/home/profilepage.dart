@@ -43,12 +43,6 @@ class ProfilePage extends StatelessWidget {
                             fontWeight: semiBold,
                           ),
                         ),
-                        Text(
-                          '@${user.username}',
-                          style: subtitletextStyle.copyWith(
-                            fontSize: 16,
-                          ),
-                        ),
                       ],
                     ),
                   ),
