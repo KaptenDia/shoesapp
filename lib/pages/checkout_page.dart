@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jogjasport/util.dart';
 import 'package:provider/provider.dart';
@@ -51,14 +52,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
       });
 
       if (await transactionProvider.checkout(
-          authProvider.user.token,
-          cartProvider.carts,
-          cartProvider.totalPrice(),
-          authProvider.isChanged == true
-              ? authProvider.addressController.text
-              : authProvider.user.address,
-          cartProvider.imgProofName)) {
+        authProvider.user.token,
+        cartProvider.carts,
+        cartProvider.totalPrice(),
+        authProvider.isChanged == true
+            ? authProvider.addressController.text
+            : authProvider.user.address,
+        cartProvider
+            .imgProofPath, // Pass the URL or empty string if upload failed
+        cartProvider.totalShipping().toString(),
+      )) {
         cartProvider.carts = [];
+        cartProvider.imgProofPath = null;
+        cartProvider.imgProofName = null;
         Navigator.restorablePushNamedAndRemoveUntil(
             context, '/checkout-success', (route) => false);
       } else {
@@ -121,7 +127,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 Column(
                   children: cartProvider.carts
                       .map(
-                        (cart) => CheckoutCard(cart),
+                        (cart) => CheckoutCard(
+                          cart,
+                          size: cart.size.toString(),
+                          color: cart.color,
+                        ),
                       )
                       .toList(),
                 ),
@@ -313,7 +323,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ],
                 ),
                 const SizedBox(
-                  height: 13,
+                  height: 12,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Biaya Pengiriman',
+                      style: secondarytextStyle.copyWith(
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      'Rp.${cartProvider.totalShipping()}',
+                      style: primarytextStyle.copyWith(
+                        fontWeight: medium,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 12,
@@ -335,7 +362,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                     ),
                     Text(
-                      'Rp.${cartProvider.totalPrice()}',
+                      'Rp.${cartProvider.totalPrice() + cartProvider.totalShipping()}',
                       style: pricetextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
@@ -410,36 +437,48 @@ class _CheckoutPageState extends State<CheckoutPage> {
 }
 
 class _Photo extends StatefulWidget {
-  const _Photo({Key key});
+  const _Photo({Key key}) : super(key: key);
 
   @override
   State<_Photo> createState() => _PhotoState();
 }
 
 class _PhotoState extends State<_Photo> {
+  Future<void> pickAndCompressImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile == null) return;
+
+    final originalFile = File(pickedFile.path);
+
+    final compressedFile = await FlutterImageCompress.compressAndGetFile(
+      originalFile.absolute.path,
+      '${originalFile.parent.path}/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg',
+      quality: 85,
+    );
+
+    if (compressedFile != null) {
+      Provider.of<CartProvider>(context, listen: false).imgProofPath =
+          compressedFile.path;
+      Provider.of<CartProvider>(context, listen: false).imgProofName =
+          compressedFile.path.split('/').last;
+    }
+
+    setState(() {}); // Trigger a rebuild to display the new image
+  }
+
+  void pickPhotoFromCamera() async {
+    await pickAndCompressImage(ImageSource.camera);
+  }
+
+  void pickPhotoFromGallery() async {
+    await pickAndCompressImage(ImageSource.gallery);
+  }
+
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of<CartProvider>(context);
-
-    void pickPhotoFromCamera() async {
-      final returnedImage =
-          await ImagePicker().pickImage(source: ImageSource.camera);
-      if (returnedImage != null) {
-        cartProvider.imgProofPath = returnedImage.path;
-        cartProvider.imgProofName = returnedImage.name;
-      }
-      setState(() {});
-    }
-
-    void pickPhotoFromGallery() async {
-      final returnedImage =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (returnedImage != null) {
-        cartProvider.imgProofPath = returnedImage.path;
-        cartProvider.imgProofName = returnedImage.name;
-      }
-      setState(() {});
-    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -453,6 +492,8 @@ class _PhotoState extends State<_Photo> {
         ExpansionTile(
           expandedAlignment: Alignment.topLeft,
           tilePadding: EdgeInsets.zero,
+          iconColor: Colors.white,
+          collapsedIconColor: Colors.white,
           title: Text(
             'Info Pembayaran',
             style: secondarytextStyle.copyWith(
@@ -530,143 +571,133 @@ class _PhotoState extends State<_Photo> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 12.0,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            const SizedBox(
+              height: 12.0,
+            ),
+            Row(
+              children: [
+                Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Text(
-                      'Upload Bukti Pembayaran :',
-                      style: secondarytextStyle.copyWith(
-                        color: primarytextColor,
-                        fontWeight: FontWeight.bold,
+                    Container(
+                      height: 120,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        color: bgColor3,
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    const SizedBox(
-                      height: 12.0,
+                    GestureDetector(
+                      onTap: () => Util().showModalTakePhoto(
+                        onSelect: (index) {
+                          if (index == 0) {
+                            pickPhotoFromCamera();
+                          } else {
+                            pickPhotoFromGallery();
+                          }
+                        },
+                      ),
+                      child: Icon(
+                        Icons.camera_alt_rounded,
+                        color: primaryColor.withOpacity(0.2),
+                      ),
                     ),
-                    Row(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              height: 120,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                color: bgColor3,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
+                    if (cartProvider.imgProofPath != null)
+                      GestureDetector(
+                        onTap: () {},
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: SizedBox(
+                            height: 120,
+                            width: 120,
+                            child: Image.file(
+                              File(cartProvider.imgProofPath ?? ''),
+                              fit: BoxFit.cover,
                             ),
-                            GestureDetector(
-                              onTap: () => Util().showModalTakePhoto(
-                                onSelect: (index) {
-                                  if (index == 0) {
-                                    pickPhotoFromCamera();
-                                  } else {
-                                    pickPhotoFromGallery();
-                                  }
-                                },
-                              ),
-                              child: Icon(
-                                Icons.camera_alt_rounded,
-                                color: primaryColor.withOpacity(0.2),
-                              ),
-                            ),
-                            if (cartProvider.imgProofPath != null)
-                              GestureDetector(
-                                onTap: () {},
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: SizedBox(
-                                    height: 120,
-                                    width: 120,
-                                    child: Image.file(
-                                      File(cartProvider.imgProofPath ?? ''),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            if (cartProvider.imgProofPath != null)
-                              GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ImageFullScreen(
-                                        path: cartProvider.imgProofPath,
-                                      ),
-                                    )),
-                                child: SizedBox(
-                                  height: 114,
-                                  width: 114,
-                                  child: Center(
-                                    child: Text(
-                                      'Tap untuk preview',
-                                      textAlign: TextAlign.center,
-                                      style: secondarytextStyle.copyWith(
-                                          color: Colors.white,
-                                          shadows: [
-                                            const Shadow(
-                                              color: Colors.black,
-                                              offset: Offset(1, 1),
-                                              blurRadius: 4,
-                                            )
-                                          ]),
-                                    ),
-                                  ),
-                                ),
-                              )
-                          ],
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Pilih foto upload bukti pembayaran dengan mengambil dari galeri atau langsung dengan kamera',
-                                style: secondarytextStyle.copyWith(
-                                  height: 1.2,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              GestureDetector(
-                                onTap: () => Util().showModalTakePhoto(
-                                  onSelect: (index) {
-                                    if (index == 0) {
-                                      pickPhotoFromCamera();
-                                    } else {
-                                      pickPhotoFromGallery();
-                                    }
-                                  },
-                                ),
-                                child: Text(
-                                  cartProvider.imgProofPath != null
-                                      ? 'Ambil foto ulang'
-                                      : 'Ambil foto',
-                                  style: primarytextStyle.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryColor,
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    if (cartProvider.imgProofPath != null)
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ImageFullScreen(
+                                path: cartProvider.imgProofPath,
+                              ),
+                            )),
+                        child: SizedBox(
+                          height: 114,
+                          width: 114,
+                          child: Center(
+                            child: Text(
+                              'Tap untuk preview',
+                              textAlign: TextAlign.center,
+                              style: secondarytextStyle
+                                  .copyWith(color: Colors.white, shadows: [
+                                const Shadow(
+                                  color: Colors.black,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 4,
+                                )
+                              ]),
+                            ),
+                          ),
+                        ),
+                      )
                   ],
                 ),
-                const SizedBox(
-                  height: 12.0,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Pilih foto upload bukti pembayaran dengan mengambil dari galeri atau langsung dengan kamera',
+                        style: secondarytextStyle.copyWith(
+                          height: 1.2,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      GestureDetector(
+                        onTap: () => Util().showModalTakePhoto(
+                          onSelect: (index) {
+                            if (index == 0) {
+                              pickPhotoFromCamera();
+                            } else {
+                              pickPhotoFromGallery();
+                            }
+                          },
+                        ),
+                        child: Text(
+                          cartProvider.imgProofPath != null
+                              ? 'Ambil foto ulang'
+                              : 'Ambil foto',
+                          style: primarytextStyle.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: primaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ],
+        ),
+        const SizedBox(
+          height: 12.0,
         ),
       ],
     );

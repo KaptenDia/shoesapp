@@ -87,7 +87,11 @@ class CartPage extends StatelessWidget {
         ),
         children: cartProvider.carts
             .map(
-              (cart) => CartCard(cart),
+              (cart) => CartCard(
+                cart,
+                size: cart.size.toString(),
+                color: cart.color,
+              ),
             )
             .toList(),
       );

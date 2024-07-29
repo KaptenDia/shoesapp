@@ -14,7 +14,11 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  addCart(ProductModel product) {
+  addCart(
+    ProductModel product,
+    int size,
+    String color,
+  ) {
     if (productExist(product)) {
       int index =
           _carts.indexWhere((element) => element.product.id == product.id);
@@ -25,6 +29,8 @@ class CartProvider with ChangeNotifier {
           id: _carts.length,
           product: product,
           quantity: 1,
+          size: size,
+          color: color,
         ),
       );
     }
@@ -38,7 +44,9 @@ class CartProvider with ChangeNotifier {
   }
 
   addQuantity(int id) {
-    _carts[id].quantity++;
+    if (_carts[id].quantity < _carts[id].product.stock) {
+      _carts[id].quantity++;
+    }
     notifyListeners();
   }
 
@@ -61,7 +69,18 @@ class CartProvider with ChangeNotifier {
   totalPrice() {
     double total = 0;
     for (var item in _carts) {
-      total += (item.quantity * item.product.price);
+      double price = double.parse(item.product.price.toString() ?? 0);
+      total += item.quantity * price;
+    }
+    return total + totalShipping();
+  }
+
+  totalShipping() {
+    double total = 0;
+    for (var item in _carts) {
+      double shippingPrice =
+          double.parse(item.product.shippingPrice.toString() ?? 0) ?? 0;
+      total += item.quantity * shippingPrice;
     }
     return total;
   }

@@ -6,9 +6,15 @@ import '../models/cart_model.dart';
 import '../models/transaction_model.dart';
 
 class TransactionService {
-  Future<bool> checkout(String token, List<CartModel> carts, double totalPrice,
-      String address, String paymentProof) async {
-    var url = '${Util.baseUrl}/checkout';
+  Future<bool> checkout(
+    String token,
+    List<CartModel> carts,
+    String address,
+    double totalPrice,
+    String paymentProof,
+    String shippingPrice,
+  ) async {
+    var url = '${Util.baseUrl}/checkout/';
     var headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
@@ -16,16 +22,15 @@ class TransactionService {
     var body = jsonEncode({
       'address': address,
       'items': carts
-          .map(
-            (cart) => {
-              'id': cart.product.id,
-              'quantity': cart.quantity,
-            },
-          )
+          .map((cart) => {
+                'id': cart.product.id,
+                'quantity': cart.quantity,
+              })
           .toList(),
-      'status': 'PENDING',
-      'payment_proof': paymentProof,
+      'status': 'SEDANG DIPROSES',
       'total_price': totalPrice,
+      'payment_proof': paymentProof,
+      'shipping_price': shippingPrice,
     });
 
     var response = await http.post(
@@ -34,13 +39,12 @@ class TransactionService {
       body: body,
     );
 
-    // ignore: avoid_print
     print(response.body);
 
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Gagal Melakukan Checkout');
+      throw Exception('Failed to Checkout!');
     }
   }
 

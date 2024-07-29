@@ -33,7 +33,7 @@ class _SplashPageState extends State<SplashPage> {
           child: CircleAvatar(
             radius: 100,
             backgroundImage: AssetImage(
-              'assets/logo-jogja-sport.jpg',
+              'assets/logo-jogja-sport.png',
             ),
           ),
         ));

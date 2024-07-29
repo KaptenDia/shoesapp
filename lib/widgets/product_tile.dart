@@ -38,8 +38,8 @@ class ProductTile extends StatelessWidget {
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      'https://via.placeholder.com/120x120',
+                    child: Image.asset(
+                      'assets/placeholder_newest.png',
                       width: 120,
                       height: 120,
                       fit: BoxFit.cover,
@@ -62,7 +62,7 @@ class ProductTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    '${product.brandId} ${product.type}',
+                    '${product.brandName} ${product.type}',
                     style: primarytextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,

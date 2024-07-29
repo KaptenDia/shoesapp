@@ -5,6 +5,7 @@ import 'package:jogjasport/models/product_model.dart';
 import 'package:jogjasport/providers/cart_provider.dart';
 import 'package:jogjasport/providers/wishlist_provider.dart';
 import 'package:jogjasport/theme.dart';
+import 'package:rate_in_stars/rate_in_stars.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductPage extends StatefulWidget {
@@ -17,6 +18,21 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   int currentIndex = 0;
+  String _selectedColor;
+  int _selectedSizes;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the selected color with the first color in the list, if available
+    if (widget.product.colors.isNotEmpty) {
+      _selectedColor = null;
+    }
+    // Initialize the selected size with the first size in the list, if available
+    if (widget.product.sizes.isNotEmpty) {
+      _selectedSizes = null;
+    }
+  }
 
   Future<void> launchWhatsappWithMobileNumber(String message) async {
     final url = "whatsapp://send?phone=6281341206957&text=$message";
@@ -133,22 +149,6 @@ class _ProductPageState extends State<ProductPage> {
       );
     }
 
-    // Widget familiarShoesCard(String imageUrl) {
-    //   return Container(
-    //     width: 54,
-    //     height: 54,
-    //     margin: const EdgeInsets.only(
-    //       right: 16,
-    //     ),
-    //     decoration: BoxDecoration(
-    //       image: DecorationImage(
-    //         image: AssetImage(imageUrl),
-    //       ),
-    //       borderRadius: BorderRadius.circular(6),
-    //     ),
-    //   );
-    // }
-
     Widget header() {
       int index = -1;
 
@@ -173,6 +173,14 @@ class _ProductPageState extends State<ProductPage> {
                     color: Colors.white,
                   ),
                 ),
+                Text(
+                  'Detail Produk',
+                  style: primarytextStyle.copyWith(
+                    fontSize: 20,
+                    fontWeight: semiBold,
+                  ),
+                ),
+                const SizedBox(),
               ],
             ),
           ),
@@ -192,8 +200,8 @@ class _ProductPageState extends State<ProductPage> {
                     )
                     .toList()
                 : [
-                    Image.network(
-                      "https://via.placeholder.com/200x200",
+                    Image.asset(
+                      "assets/placeholder_detail.png",
                       width: double.infinity,
                       height: 200.0,
                       fit: BoxFit.cover,
@@ -219,6 +227,100 @@ class _ProductPageState extends State<ProductPage> {
             }).toList(),
           ),
         ],
+      );
+    }
+
+    Widget colorSelection() {
+      return Container(
+        width: double.infinity,
+        margin: EdgeInsets.only(
+          top: defaultMargin,
+          left: defaultMargin,
+          right: defaultMargin,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Pilih Warna',
+              style: primarytextStyle.copyWith(
+                fontWeight: bold,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Wrap(
+              spacing: 8,
+              children: widget.product.colors.map((color) {
+                return ChoiceChip(
+                  label: Text(
+                    color,
+                    style: primarytextStyle.copyWith(
+                      color:
+                          _selectedColor == color ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  selected: _selectedColor == color,
+                  selectedColor: primaryColor,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      _selectedColor = selected ? color : null;
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget sizeSelection() {
+      return Container(
+        width: double.infinity,
+        margin: EdgeInsets.only(
+          top: defaultMargin,
+          left: defaultMargin,
+          right: defaultMargin,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Pilih Ukuran',
+              style: primarytextStyle.copyWith(
+                fontWeight: bold,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Wrap(
+              spacing: 8,
+              children: widget.product.sizes.map((sizes) {
+                return ChoiceChip(
+                  label: Text(
+                    sizes.toString(),
+                    style: primarytextStyle.copyWith(
+                      color:
+                          _selectedSizes == sizes ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  selected: _selectedSizes == sizes,
+                  selectedColor: primaryColor,
+                  onSelected: (bool selected) {
+                    setState(() {
+                      _selectedSizes = selected ? sizes : null;
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+          ],
+        ),
       );
     }
 
@@ -248,7 +350,7 @@ class _ProductPageState extends State<ProductPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.product.brandId,
+                          '${widget.product.brandName} ${widget.product.type}',
                           style: primarytextStyle.copyWith(
                             fontSize: 32,
                             fontWeight: semiBold,
@@ -346,6 +448,69 @@ class _ProductPageState extends State<ProductPage> {
               ),
             ),
 
+            // NOTE: RATING
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(
+                top: defaultMargin,
+                left: defaultMargin,
+                right: defaultMargin,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      RatingStars(
+                        rating: double.parse(widget.product.rating),
+                        editable: false,
+                      ),
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                      Text(
+                        widget.product.rating,
+                        style: primarytextStyle.copyWith(
+                          fontWeight: bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      '/review-page',
+                      arguments: {
+                        'comments': widget.product.comments,
+                        'title':
+                            '${widget.product.brandName} ${widget.product.type}',
+                      },
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.reviews,
+                          color: primaryColor,
+                        ),
+                        const SizedBox(
+                          width: 4.0,
+                        ),
+                        Text(
+                          'Lihat semua ulasan',
+                          style: primarytextStyle.copyWith(
+                            fontWeight: medium,
+                            color: primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
             // NOTE: DESCRIPTION
             Container(
               width: double.infinity,
@@ -381,6 +546,17 @@ class _ProductPageState extends State<ProductPage> {
             const SizedBox(
               height: 32.0,
             ),
+            if (widget.product.stock > 0)
+              // NOTE: COLOR SELECTION
+              colorSelection(),
+            const SizedBox(
+              height: 8.0,
+            ),
+            // NOTE: SIZE SELECTION
+            if (widget.product.stock > 0) sizeSelection(),
+            const SizedBox(
+              height: 32.0,
+            ),
             // NOTE: BUTTONS
             Container(
               width: double.infinity,
@@ -389,7 +565,7 @@ class _ProductPageState extends State<ProductPage> {
                 children: [
                   GestureDetector(
                     onTap: () async => await launchWhatsappWithMobileNumber(
-                      'Hai apakah ${widget.product.brandId} masih ada?',
+                      'Hai apakah ${widget.product.brandName} ${widget.product.type} masih ada?',
                     ),
                     child: Container(
                       width: 54,
@@ -412,8 +588,34 @@ class _ProductPageState extends State<ProductPage> {
                       child: TextButton(
                         onPressed: widget.product.stock > 0
                             ? () {
-                                cartProvider.addCart(widget.product);
-                                showSuccessDialog();
+                                if (_selectedColor == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: alertColor,
+                                      content: const Text(
+                                        'Pilih warna terlebih dahulu!',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  );
+                                } else if (_selectedSizes == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: alertColor,
+                                      content: const Text(
+                                        'Pilih ukuran terlebih dahulu!',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  cartProvider.addCart(
+                                    widget.product,
+                                    _selectedSizes,
+                                    _selectedColor,
+                                  );
+                                  showSuccessDialog();
+                                }
                               }
                             : null,
                         style: TextButton.styleFrom(

@@ -6,9 +6,11 @@ import 'package:jogjasport/theme.dart';
 import '../models/cart_model.dart';
 
 class CartCard extends StatelessWidget {
-  const CartCard(this.cart, {Key key}) : super(key: key);
+  const CartCard(this.cart, {Key key, this.size, this.color}) : super(key: key);
 
   final CartModel cart;
+  final String size;
+  final String color;
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +29,35 @@ class CartCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              if (cart.product.galleries.isNotEmpty)
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        cart.product.galleries[0].url,
+              cart.product.galleries.isNotEmpty
+                  ? Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            cart.product.galleries[0].url,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: const DecorationImage(
+                          image: AssetImage(
+                            'assets/placeholder_populer.png',
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
               const SizedBox(
                 width: 12,
               ),
@@ -51,7 +66,7 @@ class CartCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cart.product.brandId,
+                      '${cart.product.brandName} ${cart.product.type}',
                       style: primarytextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
@@ -68,7 +83,7 @@ class CartCard extends StatelessWidget {
                     },
                     child: Image.asset(
                       'assets/button_add.png',
-                      width: 16,
+                      width: 24,
                     ),
                   ),
                   const SizedBox(
@@ -78,6 +93,7 @@ class CartCard extends StatelessWidget {
                     cart.quantity.toString(),
                     style: primarytextStyle.copyWith(
                       fontWeight: medium,
+                      fontSize: 16,
                     ),
                   ),
                   const SizedBox(
@@ -89,7 +105,7 @@ class CartCard extends StatelessWidget {
                     },
                     child: Image.asset(
                       'assets/button_min.png',
-                      width: 16,
+                      width: 24,
                     ),
                   ),
                 ],
@@ -98,6 +114,25 @@ class CartCard extends StatelessWidget {
           ),
           const SizedBox(
             height: 12,
+          ),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: primaryColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  '$size, ',
+                  style: primarytextStyle,
+                ),
+                Text(color, style: primarytextStyle),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 12.0,
           ),
           GestureDetector(
             onTap: () {

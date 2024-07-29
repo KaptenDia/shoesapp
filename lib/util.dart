@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'list_modal.dart';
 
 class Util {
-  static String baseUrl = 'https://298d-114-10-144-211.ngrok-free.app/api';
+  static String baseUrl = 'https://bacf-114-10-147-161.ngrok-free.app/api';
+  static String galleryUrl = 'https://bacf-114-10-147-161.ngrok-free.app';
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   static get currentContext {
     return navigatorKey.currentState?.context;

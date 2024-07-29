@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:jogjasport/models/message_model.dart';
 import 'package:jogjasport/providers/auth_provider.dart';
-import 'package:jogjasport/providers/page_provider.dart';
 import 'package:jogjasport/services/message_service.dart';
 import 'package:jogjasport/theme.dart';
 import 'package:jogjasport/widgets/chat_tile.dart';
@@ -14,7 +13,6 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    PageProvider pageProvider = Provider.of<PageProvider>(context);
 
     Future<void> launchWhatsappWithMobileNumber(String message) async {
       final url =

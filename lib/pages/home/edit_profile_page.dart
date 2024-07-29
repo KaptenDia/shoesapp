@@ -65,11 +65,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: primaryColor,
           content: const Text(
-            'Berhasil Update Profile',
+            'Berhasil Update Profile, silahkan login kembali',
             textAlign: TextAlign.center,
           ),
         ));
-        Navigator.pop(context);
+        setState(() {});
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/sign-in', (route) => false);
       } catch (e) {
         setState(() {
           isLoading = false;

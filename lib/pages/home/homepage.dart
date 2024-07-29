@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     Provider.of<ProductProvider>(context, listen: false).getProducts();
+    Provider.of<ProductProvider>(context, listen: false).getCategories();
   }
 
   @override

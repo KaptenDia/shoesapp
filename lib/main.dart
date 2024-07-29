@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:jogjasport/pages/order_detail_page.dart';
 import 'package:jogjasport/pages/order_page.dart';
+import 'package:jogjasport/pages/review_page.dart';
+import 'package:jogjasport/providers/comment_provider.dart';
 import 'package:jogjasport/util.dart';
 import 'package:provider/provider.dart';
 import 'package:jogjasport/pages/cart_page.dart';
@@ -47,6 +50,9 @@ class MyApp extends StatelessWidget {
           create: (context) => TransactionProvider(),
         ),
         ChangeNotifierProvider(
+          create: (context) => CommentProvider(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => PageProvider(),
         )
       ],
@@ -64,6 +70,8 @@ class MyApp extends StatelessWidget {
           '/checkout': (context) => const CheckoutPage(),
           '/checkout-success': (context) => const CheckoutSuccessPage(),
           '/order-page': (context) => const OrderPage(),
+          '/order-detail-page': (context) => const OrderDetailPage(),
+          '/review-page': (context) => const ReviewPage(),
         },
       ),
     );
