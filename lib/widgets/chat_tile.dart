@@ -5,7 +5,7 @@ import 'package:jogjasport/pages/home/detail_chat_page.dart';
 import 'package:jogjasport/theme.dart';
 
 class ChatTile extends StatelessWidget {
-  const ChatTile(this.message, {Key key}) : super(key: key);
+  const ChatTile(this.message, {Key? key}) : super(key: key);
 
   final MessageModel message;
 
@@ -48,7 +48,7 @@ class ChatTile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        message.message,
+                        message.message!,
                         style: secondarytextStyle.copyWith(
                           fontWeight: light,
                         ),

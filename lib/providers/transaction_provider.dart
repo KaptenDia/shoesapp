@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:jogjasport/models/transaction_model.dart';
 import 'package:jogjasport/services/transaction_service.dart';
@@ -26,7 +28,7 @@ class TransactionProvider with ChangeNotifier {
   }
 
   Future<bool> checkout(String token, List<CartModel> carts, double totalPrice,
-      String address, String paymentProof) async {
+      String address, File? paymentProof) async {
     try {
       if (await TransactionService()
           .checkout(token, carts, totalPrice, address, paymentProof)) {
@@ -36,6 +38,42 @@ class TransactionProvider with ChangeNotifier {
       }
     } catch (e) {
       // ignore: avoid_print
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> addComment({
+    required String comment,
+    required int rating,
+    required int productId,
+    required String token,
+  }) async {
+    try {
+      await TransactionService().addComment(
+        comment: comment,
+        rating: rating,
+        productId: productId,
+        token: token
+      );
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> updateTransaction({
+    required String orderId,
+    required String token,
+  }) async {
+    try {
+      await TransactionService().updateTransaction(
+          orderId: orderId,
+          token: token
+      );
+      return true;
+    } catch (e) {
       print(e);
       return false;
     }

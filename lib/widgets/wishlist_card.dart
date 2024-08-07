@@ -7,7 +7,7 @@ import 'package:jogjasport/theme.dart';
 import '../pages/home/product_page.dart';
 
 class WishlistCard extends StatelessWidget {
-  const WishlistCard(this.product, {Key key}) : super(key: key);
+  const WishlistCard(this.product, {Key? key}) : super(key: key);
 
   final ProductModel product;
 
@@ -40,11 +40,11 @@ class WishlistCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            if (product.galleries.isNotEmpty)
+            if (product.galleries!.isNotEmpty)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  product.galleries[0].url,
+                  product.galleries![0].url!,
                   width: 60,
                 ),
               ),
@@ -56,7 +56,7 @@ class WishlistCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.brandId,
+                    product.brandId!,
                     style: primarytextStyle.copyWith(
                       fontWeight: semiBold,
                     ),

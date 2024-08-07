@@ -7,7 +7,7 @@ import 'package:jogjasport/widgets/wishlist_card.dart';
 import '../../providers/page_provider.dart';
 
 class WishList extends StatelessWidget {
-  const WishList({Key key}) : super(key: key);
+  const WishList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:jogjasport/models/product_model.dart';
 import 'package:jogjasport/theme.dart';
 
 class ChatBubble extends StatelessWidget {
   final String text;
   final bool isSender;
-  final ProductModel product;
+  final ProductModel? product;
 
   // ignore: use_key_in_widget_constructors
   const ChatBubble({
@@ -35,11 +35,11 @@ class ChatBubble extends StatelessWidget {
           children: [
             Row(
               children: [
-                if (product.galleries.isNotEmpty)
+                if (product!.galleries!.isNotEmpty)
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                      product.galleries[1].url,
+                      product!.galleries![1].url!,
                       width: 70,
                     ),
                   ),
@@ -51,14 +51,14 @@ class ChatBubble extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.brandId,
+                        product!.brandId!,
                         style: primarytextStyle,
                       ),
                       const SizedBox(
                         height: 4,
                       ),
                       Text(
-                        '\$${product.price}',
+                        '\$${product?.price}',
                         style: pricetextStyle.copyWith(
                           fontWeight: medium,
                         ),
@@ -101,7 +101,7 @@ class ChatBubble extends StatelessWidget {
                   ),
                   child: Text(
                     'Beli Sekarang',
-                    style: GoogleFonts.poppins(
+                    style: TextStyle(
                       color: bgColor5,
                       fontWeight: medium,
                     ),

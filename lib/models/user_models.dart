@@ -1,12 +1,11 @@
-// @dart=2.9
 class UserModel {
-  int id;
-  String name;
-  String email;
-  String address;
-  String phone;
-  String profilePhotoUrl;
-  String token;
+  int? id;
+  String? name;
+  String? email;
+  String? address;
+  String? phone;
+  String? profilePhotoUrl;
+  String? token;
 
   UserModel({
     this.id,

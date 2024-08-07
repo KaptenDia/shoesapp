@@ -1,8 +1,6 @@
-// @dart=2.9
-
 class GalleryModel {
-  int id;
-  String url;
+  int? id;
+  String? url;
 
   GalleryModel({
     this.id,

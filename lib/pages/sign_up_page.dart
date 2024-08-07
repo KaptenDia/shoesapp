@@ -7,7 +7,7 @@ import 'package:jogjasport/theme.dart';
 import 'package:jogjasport/widgets/loading_button.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key key}) : super(key: key);
+  const SignUpPage({Key? key}) : super(key: key);
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -451,7 +451,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 phoneNumberInput(),
                 emailInput(),
                 passwordInput(),
-                isLoading ? const LoadingButton() : signUpButton(),
+                isLoading ? LoadingButton() : signUpButton(),
                 const SizedBox(
                   height: 32.0,
                 ),

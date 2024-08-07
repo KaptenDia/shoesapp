@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 
 class LoadingButton extends StatelessWidget {
-  const LoadingButton({Key key}) : super(key: key);
+  const LoadingButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

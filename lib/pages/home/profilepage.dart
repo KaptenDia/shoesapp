@@ -5,7 +5,7 @@ import 'package:jogjasport/providers/auth_provider.dart';
 import 'package:jogjasport/theme.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key key}) : super(key: key);
+  const ProfilePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);

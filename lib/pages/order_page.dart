@@ -7,7 +7,7 @@ import '../providers/auth_provider.dart';
 import '../providers/transaction_provider.dart';
 
 class OrderPage extends StatefulWidget {
-  const OrderPage({Key key}) : super(key: key);
+  const OrderPage({Key? key}) : super(key: key);
 
   @override
   State<OrderPage> createState() => _OrderPageState();
@@ -21,7 +21,7 @@ class _OrderPageState extends State<OrderPage> {
       AuthProvider authProvider =
           Provider.of<AuthProvider>(context, listen: false);
       Provider.of<TransactionProvider>(context, listen: false)
-          .getTransactions(authProvider.user.token);
+          .getTransactions(authProvider.user.token!);
     });
   }
 
@@ -29,6 +29,7 @@ class _OrderPageState extends State<OrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor3,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: bgColor1,
         automaticallyImplyLeading: true,
@@ -54,10 +55,11 @@ class _OrderPageState extends State<OrderPage> {
               itemBuilder: (context, index) {
                 var transaction = transactionProvider.transactions[index];
                 return OrderCard(
-                  itemName: transaction.items[0].product.name,
+                  transactionId: transaction.id.toString(),
                   totalPrice: 'Rp.${transaction.totalPrice.toString()}',
-                  status: transaction.status,
-                  idTransaction: transaction.id.toString(),
+                  status: transaction.status!,
+                  items: transaction.items ?? [],
+                  context: context,
                 );
               },
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 double defaultMargin = 30.0;
 
@@ -19,31 +19,31 @@ Color secondarytextColor = const Color(0xff999999);
 Color subtitleColor = const Color(0xff504F5E);
 Color transparentColor = Colors.transparent;
 Color blackColor = const Color(0xff2E2E2E);
-TextStyle primarytextStyle = GoogleFonts.poppins(
+TextStyle primarytextStyle = TextStyle(
   color: primarytextColor,
 );
 
-TextStyle secondarytextStyle = GoogleFonts.poppins(
+TextStyle secondarytextStyle = TextStyle(
   color: secondarytextColor,
 );
 
-TextStyle pricetextStyle = GoogleFonts.poppins(
+TextStyle pricetextStyle = TextStyle(
   color: priceColor,
 );
 
-TextStyle subtitletextStyle = GoogleFonts.poppins(
+TextStyle subtitletextStyle = TextStyle(
   color: subtitleColor,
 );
 
-TextStyle purpletextStyle = GoogleFonts.poppins(
+TextStyle purpletextStyle = TextStyle(
   color: primaryColor,
 );
 
-TextStyle blacktextStyle = GoogleFonts.poppins(
+TextStyle blacktextStyle = TextStyle(
   color: blackColor,
 );
 
-TextStyle alerttextStyle = GoogleFonts.poppins(
+TextStyle alerttextStyle = TextStyle(
   color: alertColor,
 );
 

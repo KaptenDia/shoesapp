@@ -1,7 +1,6 @@
-// @dart=2.9
 class CategoryModel {
-  int id;
-  String name;
+  int? id;
+  String? name;
 
   CategoryModel({
     this.id,

@@ -9,7 +9,7 @@ import 'package:jogjasport/widgets/chat_tile.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ChatPage extends StatelessWidget {
-  const ChatPage({Key key}) : super(key: key);
+  const ChatPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -118,10 +118,10 @@ class ChatPage extends StatelessWidget {
     Widget content() {
       return StreamBuilder<List<MessageModel>>(
           stream: MessageService()
-              .getMessagesByUserId(userId: authProvider.user.id),
+              .getMessagesByUserId(userId: authProvider.user.id!),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              if (snapshot.data.isEmpty) {
+              if (snapshot.data!.isEmpty) {
                 return emptyChat();
               }
 
@@ -135,7 +135,7 @@ class ChatPage extends StatelessWidget {
                     ),
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      ChatTile(snapshot.data[snapshot.data.length - 1]),
+                      ChatTile(snapshot.data![snapshot.data!.length - 1]),
                     ],
                   ),
                 ),

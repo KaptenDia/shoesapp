@@ -5,7 +5,7 @@ import 'package:jogjasport/theme.dart';
 
 class ProductTile extends StatelessWidget {
   final ProductModel product;
-  const ProductTile(this.product, {Key key}) : super(key: key);
+  const ProductTile(this.product, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +26,11 @@ class ProductTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            product.galleries.isNotEmpty
+            product.galleries!.isNotEmpty
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.network(
-                      product.galleries[0].url,
+                      product.galleries![0].url!,
                       width: 120,
                       height: 120,
                       fit: BoxFit.cover,
@@ -53,7 +53,7 @@ class ProductTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.category.name,
+                    product.category!.name!,
                     style: secondarytextStyle.copyWith(
                       fontSize: 12,
                     ),

@@ -6,7 +6,7 @@ import '../pages/home/product_page.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
-  const ProductCard(this.product, {Key key}) : super(key: key);
+  const ProductCard(this.product, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +31,14 @@ class ProductCard extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            if (product.galleries.isNotEmpty)
+            if (product.galleries!.isNotEmpty)
               Image.network(
-                product.galleries[0].url,
+                product.galleries![0].url!,
                 width: 215,
                 height: 150,
                 fit: BoxFit.cover,
               ),
-            if (product.galleries.isEmpty)
+            if (product.galleries!.isEmpty)
               Image.network(
                 'https://via.placeholder.com/220x150',
               ),
@@ -50,7 +50,7 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.category.name,
+                    product.category!.name!,
                     style: secondarytextStyle.copyWith(
                       fontSize: 12,
                     ),

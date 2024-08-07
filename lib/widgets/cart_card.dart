@@ -6,7 +6,7 @@ import 'package:jogjasport/theme.dart';
 import '../models/cart_model.dart';
 
 class CartCard extends StatelessWidget {
-  const CartCard(this.cart, {Key key}) : super(key: key);
+  const CartCard(this.cart, {Key? key}) : super(key: key);
 
   final CartModel cart;
 
@@ -30,7 +30,7 @@ class CartCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              if (cart.product.galleries.isNotEmpty)
+              if (cart.product!.galleries!.isNotEmpty)
                 Container(
                   width: 60,
                   height: 60,
@@ -38,7 +38,7 @@ class CartCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     image: DecorationImage(
                       image: NetworkImage(
-                        cart.product.galleries[0].url,
+                        cart.product!.galleries![0].url!,
                       ),
                     ),
                   ),
@@ -51,12 +51,12 @@ class CartCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cart.product.brandId,
+                      cart.product!.brandId!,
                       style: primarytextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
                     ),
-                    Text('Rp.${cart.product.price}', style: pricetextStyle),
+                    Text('Rp.${cart.product?.price}', style: pricetextStyle),
                   ],
                 ),
               ),
@@ -64,7 +64,7 @@ class CartCard extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      cartProvider.addQuantity(cart.id);
+                      cartProvider.addQuantity(cart.id!);
                     },
                     child: Image.asset(
                       'assets/button_add.png',
@@ -85,7 +85,7 @@ class CartCard extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      cartProvider.reduceQuantity(cart.id);
+                      cartProvider.reduceQuantity(cart.id!);
                     },
                     child: Image.asset(
                       'assets/button_min.png',
@@ -101,7 +101,7 @@ class CartCard extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              cartProvider.removeCart(cart.id);
+              cartProvider.removeCart(cart.id!);
             },
             child: Row(
               children: [

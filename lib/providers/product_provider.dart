@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -45,7 +44,7 @@ class ProductProvider with ChangeNotifier {
 
   List<ProductModel> getProductsByCategory(String category) {
     filteredProducts = _products
-        .where((product) => product.category.name == category)
+        .where((product) => product.category?.name == category)
         .toList();
     notifyListeners();
     return filteredProducts;

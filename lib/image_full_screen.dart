@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageFullScreen extends StatelessWidget {
-  final String path;
-  final String url;
+  final String? path;
+  final String? url;
   const ImageFullScreen({
-    Key key,
+    Key? key,
     this.path,
     this.url,
   }) : super(key: key);
@@ -43,13 +43,13 @@ class ImageFullScreen extends StatelessWidget {
     if (path != null) {
       return Center(
         child: Image.file(
-          File(path),
+          File(path!),
           alignment: Alignment.center,
         ),
       );
     } else if (url != null) {
       return Center(
-        child: Image.network(url),
+        child: Image.network(url!),
       );
     } else {
       return const SizedBox();

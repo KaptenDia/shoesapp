@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 
 class ProductCategories extends StatelessWidget {
-  final String title;
+  final String? title;
   final bool isSelected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const ProductCategories({
-    Key key,
+    Key? key,
     this.title,
     this.isSelected = false,
     this.onTap,
@@ -28,7 +28,7 @@ class ProductCategories extends StatelessWidget {
           color: isSelected ? primaryColor : bgColor5,
         ),
         child: Text(
-          title,
+          title!,
           style: primarytextStyle.copyWith(
             fontSize: 13,
             fontWeight: medium,

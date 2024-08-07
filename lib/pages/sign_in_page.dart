@@ -8,7 +8,7 @@ import 'package:jogjasport/theme.dart';
 import '../widgets/loading_button.dart';
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({Key key}) : super(key: key);
+  const SignInPage({Key? key}) : super(key: key);
 
   @override
   State<SignInPage> createState() => _SignInPageState();
@@ -267,7 +267,7 @@ class _SignInPageState extends State<SignInPage> {
               header(),
               emailInput(),
               passwordInput(),
-              isLoading ? const LoadingButton() : signInButton(),
+              isLoading ? LoadingButton() : signInButton(),
               const Spacer(),
               footer(),
             ],

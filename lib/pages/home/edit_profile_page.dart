@@ -12,10 +12,10 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  TextEditingController nameController;
-  TextEditingController emailController;
-  TextEditingController addressController;
-  TextEditingController phoneController;
+  TextEditingController? nameController;
+  TextEditingController? emailController;
+  TextEditingController? addressController;
+  TextEditingController? phoneController;
   bool isLoading = false;
 
   @override
@@ -35,10 +35,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   void dispose() {
-    nameController.dispose();
-    emailController.dispose();
-    addressController.dispose();
-    phoneController.dispose();
+    nameController?.dispose();
+    emailController?.dispose();
+    addressController?.dispose();
+    phoneController?.dispose();
     super.dispose();
   }
 
@@ -53,11 +53,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
       });
       try {
         await authProvider.updateProfile(
-          name: nameController.text,
-          email: emailController.text,
-          address: addressController.text,
-          phone: phoneController.text,
-          token: user.token,
+          name: nameController!.text,
+          email: emailController!.text,
+          address: addressController!.text,
+          phone: phoneController!.text,
+          token: user.token!,
         );
         setState(() {
           isLoading = false;

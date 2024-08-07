@@ -5,7 +5,7 @@ import '../models/cart_model.dart';
 
 class CheckoutCard extends StatelessWidget {
   final CartModel cart;
-  const CheckoutCard(this.cart, {Key key}) : super(key: key);
+  const CheckoutCard(this.cart, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class CheckoutCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          if (cart.product.galleries.isNotEmpty)
+          if (cart.product!.galleries!.isNotEmpty)
             Container(
               width: 60,
               height: 60,
@@ -31,7 +31,7 @@ class CheckoutCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
                   image: NetworkImage(
-                    cart.product.galleries[0].url,
+                    cart.product!.galleries![0].url!,
                   ),
                 ),
               ),
@@ -44,7 +44,7 @@ class CheckoutCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  cart.product.brandId,
+                  cart.product!.brandId!,
                   style: primarytextStyle.copyWith(
                     fontWeight: semiBold,
                   ),
@@ -54,7 +54,7 @@ class CheckoutCard extends StatelessWidget {
                   height: 2,
                 ),
                 Text(
-                  'Rp.${cart.product.price}',
+                  'Rp.${cart.product?.price}',
                   style: pricetextStyle,
                 ),
               ],

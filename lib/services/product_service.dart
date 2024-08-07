@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
@@ -30,6 +28,7 @@ class ProductService {
     } else {
       // ignore: avoid_print
       print('Gagal Get Products!');
+      return [];
     }
   }
 
@@ -55,6 +54,7 @@ class ProductService {
     } else {
       // ignore: avoid_print
       print('Gagal Get Products!');
+      return [];
     }
   }
 }

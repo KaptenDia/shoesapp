@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 import 'list_modal.dart';
 
 class Util {
-  static String baseUrl = 'https://298d-114-10-144-211.ngrok-free.app/api';
+  // static String baseUrl = 'https://298d-114-10-144-211.ngrok-free.app/api';
+  static String imageUrl = 'http://10.250.100.174:8000';
+  static String baseUrl = 'http://10.250.100.174:8000/api';
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   static get currentContext {
     return navigatorKey.currentState?.context;
   }
 
   void showModalTakePhoto({
-    String title,
-    List<String> options,
-    List<IconData> icons,
-    Function(int) onSelect,
+    String? title,
+    List<String>? options,
+    List<IconData>? icons,
+    Function(int)? onSelect,
   }) async {
     showModalBottom(
       content: ListModal(
@@ -36,8 +38,8 @@ class Util {
   Future<void> showModalBottom({
     bool isDismissible = true,
     bool keyboardPush = false,
-    Widget content,
-    Function() onComplete,
+    required Widget content,
+    Function()? onComplete,
   }) async {
     showModalBottomSheet(
       backgroundColor: Colors.transparent,

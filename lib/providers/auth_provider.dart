@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -6,11 +5,11 @@ import 'package:jogjasport/models/user_models.dart';
 import 'package:jogjasport/services/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
-  UserModel _user;
+  UserModel? _user;
   TextEditingController addressController = TextEditingController();
   bool isChanged = false;
 
-  UserModel get user => _user;
+  UserModel get user => _user!;
 
   set user(UserModel user) {
     _user = user;
@@ -19,11 +18,11 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> register({
-    String name,
-    String address,
-    String phone,
-    String email,
-    String password,
+    required String name,
+    required String address,
+    required String phone,
+    required String email,
+    required String password,
   }) async {
     try {
       UserModel user = await AuthService().register(
@@ -42,11 +41,11 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<bool> updateProfile({
-    String name,
-    String address,
-    String phone,
-    String email,
-    String token,
+    required String name,
+    required String address,
+    required String phone,
+    required String email,
+    required String token,
   }) async {
     try {
       UserModel user = await AuthService().updateProfile(
@@ -68,8 +67,8 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<bool> login({
-    String email,
-    String password,
+    required String email,
+    required String password,
   }) async {
     try {
       UserModel user = await AuthService().login(

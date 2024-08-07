@@ -14,7 +14,7 @@ import '../image_full_screen.dart';
 import '../widgets/loading_button.dart';
 
 class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({Key key}) : super(key: key);
+  const CheckoutPage({Key? key}) : super(key: key);
 
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();
@@ -22,6 +22,7 @@ class CheckoutPage extends StatefulWidget {
 
 class _CheckoutPageState extends State<CheckoutPage> {
   bool isLoading = false;
+  File? _imageFile;
 
   @override
   void initState() {
@@ -51,13 +52,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
       });
 
       if (await transactionProvider.checkout(
-          authProvider.user.token,
+          authProvider.user.token!,
           cartProvider.carts,
           cartProvider.totalPrice(),
           authProvider.isChanged == true
               ? authProvider.addressController.text
-              : authProvider.user.address,
-          cartProvider.imgProofName)) {
+              : authProvider.user.address!,
+          cartProvider.imageFile)) {
         cartProvider.carts = [];
         Navigator.restorablePushNamedAndRemoveUntil(
             context, '/checkout-success', (route) => false);
@@ -204,47 +205,49 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     const SizedBox(
                       width: 12,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Lokasi Store',
-                          style: secondarytextStyle.copyWith(
-                            fontSize: 12,
-                            fontWeight: light,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Lokasi Store',
+                            style: secondarytextStyle.copyWith(
+                              fontSize: 12,
+                              fontWeight: light,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Adidas Core',
-                          style: primarytextStyle.copyWith(
-                            fontWeight: medium,
-                          ),
-                        ),
-                        SizedBox(
-                          height: defaultMargin,
-                        ),
-                        Text(
-                          'Alamat Kamu',
-                          style: secondarytextStyle.copyWith(
-                            fontSize: 12,
-                            fontWeight: light,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 60,
-                          width: 300,
-                          child: Text(
-                            authProvider.isChanged
-                                ? authProvider.addressController.text
-                                : authProvider.user.address,
+                          Text(
+                            'Adidas Core',
                             style: primarytextStyle.copyWith(
                               fontWeight: medium,
                             ),
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            height: defaultMargin,
+                          ),
+                          Text(
+                            'Alamat Kamu',
+                            style: secondarytextStyle.copyWith(
+                              fontSize: 12,
+                              fontWeight: light,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 60,
+                            width: 300,
+                            child: Text(
+                              authProvider.isChanged
+                                  ? authProvider.addressController.text
+                                  : authProvider.user.address!,
+                              style: primarytextStyle.copyWith(
+                                fontWeight: medium,
+                              ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -342,6 +345,26 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                   ],
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Pengiriman',
+                      style: pricetextStyle.copyWith(
+                        fontWeight: semiBold,
+                      ),
+                    ),
+                    Text(
+                      'Rp.${cartProvider.totalShipping(cartProvider.totalPrice())}',
+                      style: pricetextStyle.copyWith(
+                        fontWeight: semiBold,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -350,7 +373,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             height: defaultMargin,
           ),
 
-          const _Photo(),
+          _Photo(),
 
           // NOTE : CHECKOUT BUTTON
           SizedBox(
@@ -365,7 +388,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   margin: const EdgeInsets.only(
                     bottom: 30,
                   ),
-                  child: const LoadingButton(),
+                  child: LoadingButton(),
                 )
               : Container(
                   height: 50,
@@ -410,7 +433,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 }
 
 class _Photo extends StatefulWidget {
-  const _Photo({Key key});
+  const _Photo({Key? key});
 
   @override
   State<_Photo> createState() => _PhotoState();
@@ -427,6 +450,7 @@ class _PhotoState extends State<_Photo> {
       if (returnedImage != null) {
         cartProvider.imgProofPath = returnedImage.path;
         cartProvider.imgProofName = returnedImage.name;
+        cartProvider.imageFile = File(returnedImage.path);
       }
       setState(() {});
     }
@@ -437,6 +461,7 @@ class _PhotoState extends State<_Photo> {
       if (returnedImage != null) {
         cartProvider.imgProofPath = returnedImage.path;
         cartProvider.imgProofName = returnedImage.name;
+        cartProvider.imageFile = File(returnedImage.path);
       }
       setState(() {});
     }
@@ -595,7 +620,7 @@ class _PhotoState extends State<_Photo> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ImageFullScreen(
-                                        path: cartProvider.imgProofPath,
+                                        path: cartProvider.imgProofPath!,
                                       ),
                                     )),
                                 child: SizedBox(

@@ -10,7 +10,7 @@ import 'package:jogjasport/widgets/chat_bubble.dart';
 // ignore: must_be_immutable
 class DetailChatPage extends StatefulWidget {
   ProductModel product;
-  DetailChatPage(this.product, {Key key}) : super(key: key);
+  DetailChatPage(this.product, {Key? key}) : super(key: key);
 
   @override
   _DetailChatPageState createState() => _DetailChatPageState();
@@ -37,7 +37,7 @@ class _DetailChatPageState extends State<DetailChatPage> {
       });
     }
 
-    Widget header() {
+    PreferredSize header() {
       return PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: AppBar(
@@ -93,11 +93,11 @@ class _DetailChatPageState extends State<DetailChatPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (widget.product.galleries.isNotEmpty)
+            if (widget.product.galleries!.isNotEmpty)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  widget.product.galleries[0].url,
+                  widget.product.galleries![0].url!,
                   width: 54,
                 ),
               ),
@@ -110,7 +110,7 @@ class _DetailChatPageState extends State<DetailChatPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.product.brandId,
+                    widget.product.brandId!,
                     style: primarytextStyle,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -196,7 +196,7 @@ class _DetailChatPageState extends State<DetailChatPage> {
     Widget content() {
       return StreamBuilder<List<MessageModel>>(
           stream: MessageService()
-              .getMessagesByUserId(userId: authProvider.user.id),
+              .getMessagesByUserId(userId: authProvider.user.id!),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView(
@@ -204,10 +204,10 @@ class _DetailChatPageState extends State<DetailChatPage> {
                   horizontal: defaultMargin,
                 ),
                 children: snapshot.data
-                    .map((MessageModel message) => ChatBubble(
-                          isSender: message.isFromUser,
-                          text: message.message,
-                          product: message.product,
+                    !.map((MessageModel message) => ChatBubble(
+                          isSender: message.isFromUser!,
+                          text: message.message!,
+                          product: message.product!,
                         ))
                     .toList(),
               );

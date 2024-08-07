@@ -1,12 +1,12 @@
 import 'package:jogjasport/models/product_model.dart';
 
 class MessageModel {
-  String message, userName, userImage;
-  int userId;
-  bool isFromUser;
-  ProductModel product;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? message, userName, userImage;
+  int? userId;
+  bool? isFromUser;
+  ProductModel? product;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   MessageModel({
     this.message,
@@ -39,7 +39,7 @@ class MessageModel {
       'userImage': userImage,
       'userId': userId,
       'isFromUser': isFromUser,
-      'product': product is UninitializedProductModel ? {} : product.toJson(),
+      'product': product is UninitializedProductModel ? {} : product?.toJson(),
       'createdAt': createdAt.toString(),
       'updatedAt': updatedAt.toString(),
     };

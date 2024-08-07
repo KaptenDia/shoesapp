@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ProductPage extends StatefulWidget {
   final ProductModel product;
-  const ProductPage(this.product, {Key key}) : super(key: key);
+  const ProductPage(this.product, {Key? key}) : super(key: key);
 
   @override
   _ProductPageState createState() => _ProductPageState();
@@ -17,6 +17,10 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   int currentIndex = 0;
+  int? colorsVariant;
+  int? sizeVariant;
+  double sumRating = 0;
+  double totalRating = 0;
 
   Future<void> launchWhatsappWithMobileNumber(String message) async {
     final url = "whatsapp://send?phone=6281341206957&text=$message";
@@ -33,6 +37,15 @@ class _ProductPageState extends State<ProductPage> {
         ),
       );
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.product.comments!.forEach((element) {
+      sumRating = sumRating + (element.rating != null ? (double.tryParse(element.rating ?? "0"))!.toInt() : 0);
+    },);
+    totalRating = sumRating / (widget.product.comments?.length ?? 0);
   }
 
   @override
@@ -180,11 +193,10 @@ class _ProductPageState extends State<ProductPage> {
             height: 24.0,
           ),
           CarouselSlider(
-            items: widget.product.galleries.isNotEmpty
-                ? widget.product.galleries
-                    .map(
+            items: widget.product.galleries!.isNotEmpty
+                ? widget.product.galleries?.map(
                       (image) => Image.network(
-                        image.url,
+                        image.url!,
                         width: MediaQuery.of(context).size.width,
                         height: 310,
                         fit: BoxFit.cover,
@@ -213,7 +225,7 @@ class _ProductPageState extends State<ProductPage> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: widget.product.galleries.map((e) {
+            children: widget.product.galleries!.map((e) {
               index++;
               return indicator(index);
             }).toList(),
@@ -248,16 +260,28 @@ class _ProductPageState extends State<ProductPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.product.brandId,
+                          widget.product.brandId!,
                           style: primarytextStyle.copyWith(
                             fontSize: 32,
                             fontWeight: semiBold,
                           ),
                         ),
                         Text(
-                          widget.product.category.name,
+                          widget.product.category!.name!,
                           style: secondarytextStyle.copyWith(
                             fontSize: 24,
+                          ),
+                        ),
+                        SizedBox(height: 10,),
+                        Row(
+                          children: List.generate(
+                            5,
+                                (indexs) {
+                              return Icon(
+                                indexs < totalRating ? Icons.star : Icons.star_border,
+                                color: Colors.amber,
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -346,6 +370,88 @@ class _ProductPageState extends State<ProductPage> {
               ),
             ),
 
+            SizedBox(height: 20,),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+              child: Row(
+                children: [
+                  Text(
+                    "Warna :",
+                    style: subtitletextStyle.copyWith(
+                        fontWeight: light,
+                        fontSize: 16,
+                        color: Colors.white
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      height: 20,
+                      child: ListView.separated(
+                        itemCount: widget.product.colors!.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (context, index) => SizedBox(width: 10,),
+                        itemBuilder: (context, index) {
+                          return Text(
+                            "${ widget.product.colors![index].color}",
+                            style: subtitletextStyle.copyWith(
+                                fontWeight: light,
+                                fontSize: 16,
+                                color: Colors.white
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+
+            SizedBox(height: 12,),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+              child: Row(
+                children: [
+                  Text(
+                    "Ukuran :",
+                    style: subtitletextStyle.copyWith(
+                        fontWeight: light,
+                        fontSize: 16,
+                        color: Colors.white
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      height: 20,
+                      child: ListView.separated(
+                        itemCount: widget.product.sizes!.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (context, index) => SizedBox(width: 10,),
+                        itemBuilder: (context, index) {
+                          return Text(
+                            "${ widget.product.sizes![index].size}",
+                            style: subtitletextStyle.copyWith(
+                                fontWeight: light,
+                                fontSize: 16,
+                                color: Colors.white
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+
             // NOTE: DESCRIPTION
             Container(
               width: double.infinity,
@@ -358,7 +464,7 @@ class _ProductPageState extends State<ProductPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Dekripsi Produk',
+                    'Deskripsi Produk',
                     style: primarytextStyle.copyWith(
                       fontWeight: bold,
                       fontSize: 20,
@@ -368,13 +474,67 @@ class _ProductPageState extends State<ProductPage> {
                     height: 12,
                   ),
                   Text(
-                    widget.product.description,
+                    widget.product.description!,
                     style: subtitletextStyle.copyWith(
                       fontWeight: light,
                       fontSize: 16,
+                      color: Colors.white
                     ),
                     textAlign: TextAlign.justify,
                   ),
+                  SizedBox(height: 20,),
+                  Text(
+                    'Ulasan : ',
+                    style: primarytextStyle.copyWith(
+                      fontWeight: bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  ListView.separated(
+                    itemCount: widget.product.comments!.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    separatorBuilder: (context, index) => SizedBox(height: 16,),
+                    itemBuilder: (context, index) {
+                      return Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${widget.product.comments![index].customerName}",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            Row(
+                              children: List.generate(
+                                5,
+                                    (indexs) {
+                                  return Icon(
+                                    indexs < double.tryParse(widget.product.comments![index].rating ?? "0")!.toInt() ? Icons.star : Icons.star_border,
+                                    color: Colors.amber,
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            Text(
+                              "${widget.product.comments![index].comment}",
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
                 ],
               ),
             ),
@@ -410,17 +570,173 @@ class _ProductPageState extends State<ProductPage> {
                     child: SizedBox(
                       height: 54,
                       child: TextButton(
-                        onPressed: widget.product.stock > 0
+                        onPressed: (widget.product.stock ?? 0) > 0
                             ? () {
-                                cartProvider.addCart(widget.product);
-                                showSuccessDialog();
+                                if(widget.product.colors!.isNotEmpty || widget.product.sizes!.isNotEmpty) {
+                                  sizeVariant = null;
+                                  colorsVariant = null;
+                                  showModalBottomSheet(
+                                      context: context,
+                                      enableDrag: true,
+                                      isScrollControlled: true,
+                                      builder: (builder){
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom,
+                                          ),
+                                          child: SingleChildScrollView(
+                                            child: Container(
+                                                width: double.infinity,
+                                                color: Colors.transparent,
+                                                child: new Container(
+                                                    width: double.infinity,
+                                                    padding: EdgeInsets.all(20),
+                                                    decoration: new BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius: new BorderRadius.only(
+                                                            topLeft: const Radius.circular(10.0),
+                                                            topRight: const Radius.circular(10.0))),
+                                                    child: StatefulBuilder(
+                                                        builder: (context, setState) {
+                                                          return Column(
+                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                Text("Pilih Varian", style: TextStyle(fontWeight: FontWeight.bold),),
+                                                                SizedBox(height: 20,),
+                                                                Text("Warna"),
+                                                                SizedBox(height: 10,),
+                                                                Container(
+                                                                  width: double.infinity,
+                                                                  height: 40,
+                                                                  child: ListView.separated(
+                                                                    itemCount: widget.product.colors!.length,
+                                                                    shrinkWrap: true,
+                                                                    scrollDirection: Axis.horizontal,
+                                                                    separatorBuilder: (context, index) => SizedBox(width: 10,),
+                                                                    itemBuilder: (context, index) {
+                                                                      return GestureDetector(
+                                                                        onTap: () {
+                                                                          setState(() {
+                                                                            colorsVariant = widget.product.colors![index].id;
+                                                                          });
+                                                                        },
+                                                                        child: Container(
+                                                                          padding: EdgeInsets.all(10),
+                                                                          decoration: BoxDecoration(
+                                                                            color: colorsVariant == widget.product.colors![index].id ?  Colors.deepPurpleAccent : Colors.white,
+                                                                            borderRadius: BorderRadius.circular(10),
+                                                                            border: Border.all(width: 1, color: colorsVariant == widget.product.colors![index].id ?  Colors.deepPurpleAccent : Colors.grey)
+                                                                          ),
+                                                                          child: Text(
+                                                                            "${widget.product.colors![index].color}",
+                                                                            style: subtitletextStyle.copyWith(
+                                                                                fontSize: 16,
+                                                                                color: colorsVariant == widget.product.colors![index].id ?  Colors.white : Colors.grey
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 20,),
+                                                                Text("Ukuran"),
+                                                                SizedBox(height: 10,),
+                                                                Container(
+                                                                  width: double.infinity,
+                                                                  height: 40,
+                                                                  child: ListView.separated(
+                                                                    itemCount: widget.product.sizes!.length,
+                                                                    shrinkWrap: true,
+                                                                    scrollDirection: Axis.horizontal,
+                                                                    separatorBuilder: (context, index) => SizedBox(width: 10,),
+                                                                    itemBuilder: (context, index) {
+                                                                      return GestureDetector(
+                                                                        onTap: () {
+                                                                          setState(() {
+                                                                            sizeVariant = widget.product.sizes![index].id;
+                                                                          });
+                                                                        },
+                                                                        child: Container(
+                                                                          padding: EdgeInsets.all(10),
+                                                                          decoration: BoxDecoration(
+                                                                            color: sizeVariant == widget.product.sizes![index].id ?  Colors.deepPurpleAccent : Colors.white,
+                                                                            borderRadius: BorderRadius.circular(10),
+                                                                            border: Border.all(width: 1, color: sizeVariant == widget.product.sizes![index].id ?  Colors.deepPurpleAccent : Colors.grey)
+                                                                          ),
+                                                                          child: Text(
+                                                                            "${widget.product.sizes![index].size}",
+                                                                            style: subtitletextStyle.copyWith(
+                                                                                fontSize: 16,
+                                                                                color: sizeVariant == widget.product.sizes![index].id ?  Colors.white : Colors.grey
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 20,),
+                                                                SizedBox(
+                                                                  width: double.infinity,
+                                                                  child: ElevatedButton(
+                                                                    onPressed: () async {
+                                                                      if(colorsVariant == null || sizeVariant == null) {
+                                                                        Navigator.pop(context);
+                                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                                          SnackBar(
+                                                                            backgroundColor: alertColor,
+                                                                            content: const Text(
+                                                                              'Mohon Lengkapi Data',
+                                                                              textAlign: TextAlign.center,
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      } else {
+                                                                        cartProvider.addCart(widget.product, colorsVariant ?? 0, sizeVariant ?? 0);
+                                                                        showSuccessDialog();
+                                                                      }
+                                                                    },
+                                                                    style: ElevatedButton.styleFrom(
+                                                                      backgroundColor: Colors.deepPurpleAccent,
+                                                                      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius.circular(8),
+                                                                      ),
+                                                                    ),
+                                                                    child: Text(
+                                                                      "Masukan Keranjang",
+                                                                      style: TextStyle(
+                                                                        color: Colors.white,
+                                                                        fontWeight: FontWeight.bold,
+                                                                        fontSize: 16,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              ]
+                                                          );
+                                                        }
+                                                    )
+                                                )
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                  );
+                                } else {
+                                  cartProvider.addCart(widget.product, 0, 0);
+                                  showSuccessDialog();
+                                }
                               }
                             : null,
                         style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          backgroundColor: widget.product.stock > 0
+                          backgroundColor: (widget.product.stock ?? 0) > 0
                               ? primaryColor
                               : Colors.grey,
                         ),
@@ -429,7 +745,7 @@ class _ProductPageState extends State<ProductPage> {
                           style: primarytextStyle.copyWith(
                             fontSize: 16,
                             fontWeight: semiBold,
-                            color: widget.product.stock > 0
+                            color: (widget.product.stock ?? 0) > 0
                                 ? Colors.white
                                 : Colors.black,
                           ),

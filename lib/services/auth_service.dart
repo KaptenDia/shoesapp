@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:convert';
 
 import '../models/user_models.dart';
@@ -9,12 +7,12 @@ import '../util.dart';
 
 class AuthService {
   Future<UserModel> register({
-    String name,
-    String username,
-    String address,
-    String phone,
-    String email,
-    String password,
+    required String name,
+    String? username,
+    required String address,
+    required String phone,
+    required String email,
+    required String password,
   }) async {
     var url = '${Util.baseUrl}/register';
     var headers = {'Content-Type': 'application/json'};
@@ -49,8 +47,8 @@ class AuthService {
   }
 
   Future<UserModel> login({
-    String email,
-    String password,
+    required String email,
+    required String password,
   }) async {
     var url = '${Util.baseUrl}/login';
     var headers = {'Content-Type': 'application/json'};
@@ -82,11 +80,11 @@ class AuthService {
   }
 
   Future<UserModel> updateProfile({
-    String name,
-    String address,
-    String phone,
-    String email,
-    String token,
+    required String name,
+    required String address,
+    required String phone,
+    required String email,
+    required String token,
   }) async {
     var url = '${Util.baseUrl}/update-user';
     var headers = {

@@ -10,14 +10,14 @@ import '../../models/user_models.dart';
 import '../../providers/auth_provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  String selectedCategory;
+  String? selectedCategory;
 
   @override
   void initState() {
@@ -77,13 +77,13 @@ class _HomePageState extends State<HomePage> {
               children: productProvider.categories
                   .map(
                     (categories) => ProductCategories(
-                      title: categories.name,
+                      title: categories.name!,
                       isSelected: categories.name == selectedCategory,
                       onTap: () {
                         setState(() {
                           selectedCategory = categories.name;
                         });
-                        productProvider.getProductsByCategory(categories.name);
+                        productProvider.getProductsByCategory(categories.name!);
                       },
                     ),
                   )
@@ -116,12 +116,12 @@ class _HomePageState extends State<HomePage> {
               children: selectedCategory != null
                   ? productProvider.filteredProducts
                       .map(
-                        (product) => ProductCard(product),
+                        (product) => Padding(padding: EdgeInsets.only(right: 10), child: ProductCard(product)),
                       )
                       .toList()
                   : productProvider.products
                       .map(
-                        (product) => ProductCard(product),
+                        (product) => Padding(padding: EdgeInsets.only(right: 10), child: ProductCard(product)),
                       )
                       .toList()),
         ),

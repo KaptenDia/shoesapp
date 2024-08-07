@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:jogjasport/theme.dart';
 
 class ContainerBottomSheet extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
   final EdgeInsets padding;
   final bool showCloseButton;
-  final Function() actionDismiss;
+  final Function()? actionDismiss;
 
   const ContainerBottomSheet({
-    Key key,
+    Key? key,
     this.child,
     this.padding = const EdgeInsets.fromLTRB(16, 24, 16, 16),
     this.showCloseButton = false,
